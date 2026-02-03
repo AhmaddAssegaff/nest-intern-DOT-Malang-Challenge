@@ -20,7 +20,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
 
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: jwtConfig.AUTH_JWT_ACCESS_TOKEN_SECRET,
+      secretOrKey: jwtConfig.AUTH_JWT_REFRESH_TOKEN_SECRET,
       algorithms: ['HS256'],
       ignoreExpiration: false,
     });
