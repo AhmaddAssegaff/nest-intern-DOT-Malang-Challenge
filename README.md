@@ -1,7 +1,7 @@
 ## Nameing convesion method : 
-# Controller = HTTP verb (get, post, patch, delete)
-# Service = business action (find, create, update, delete)
-# Repository = DB action (select, insert, set, delete)
+### Controller = HTTP verb (get, post, patch, delete)
+### Service = business action (find, create, update, delete)
+### Repository = DB action (select, insert, set, delete)
 
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
