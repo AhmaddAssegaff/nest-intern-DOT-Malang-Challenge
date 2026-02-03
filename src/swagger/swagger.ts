@@ -23,6 +23,16 @@ export function createDocument(app: INestApplication) {
         in: 'header',
       },
       'access-token',
+    )
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        in: 'header',
+      },
+      'refresh-token',
     );
   SWAGGER_CONFIG.tags.forEach((tag) => {
     builder.addTag(tag);

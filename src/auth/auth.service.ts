@@ -130,4 +130,28 @@ export class AuthService {
       },
     };
   }
+
+  async refreshToken(payload: JwtPayload) {
+    const user = await this.userService.findUserById(payload.sub);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    const newPayload: JwtPayload = {
+      sub: user.id,
+      username: user.username,
+      role: user.role,
+    };
+
+    const accessToken = this.signAccessToken(newPayload);
+    const refreshToken = this.signRefreshToken(newPayload);
+
+    return {
+      payload: newPayload,
+      tokens: {
+        accessToken,
+        refreshToken,
+      },
+    };
+  }
 }
