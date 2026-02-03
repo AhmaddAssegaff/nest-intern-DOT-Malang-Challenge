@@ -1,0 +1,32 @@
+import { Injectable } from '@nestjs/common';
+import { QueryResult } from 'pg';
+import { DatabaseService } from '../database/database.service';
+import { CreateUserDto } from './dto/createUser.dto';
+import { InterfaceUsers } from './user.interface';
+
+const SQL = {
+  CREATE_USER:
+    'INSERT INTO "user" (username, password) VALUES ($1, $2) RETURNING id, username, role, created_at',
+  SELECT_USER_BY_ID: 'SELECT * FROM "user" WHERE id = $1',
+};
+
+@Injectable()
+export class UserRepository {
+  constructor(private readonly databaseService: DatabaseService) {}
+
+  async insertUser(createUserDto: CreateUserDto): Promise<InterfaceUsers> {
+    const { password, username } = createUserDto;
+
+    const result: QueryResult<InterfaceUsers> =
+      await this.databaseService.query(SQL.CREATE_USER, [username, password]);
+
+    return result.rows[0];
+  }
+
+  async selectOneUserById(id: string): Promise<InterfaceUsers> {
+    const result: QueryResult<InterfaceUsers> =
+      await this.databaseService.query(SQL.SELECT_USER_BY_ID, [id]);
+
+    return result.rows[0];
+  }
+}
