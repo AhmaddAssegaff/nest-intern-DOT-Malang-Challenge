@@ -8,10 +8,10 @@ import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorator/roles.decorator';
 import { userRole } from '../../user/user.interface';
 
-interface User {
-  id: number;
-  username: string;
-  roles: userRole[];
+export interface RequestWithUser extends Request {
+  user: {
+    role: userRole;
+  };
 }
 
 @Injectable()
@@ -24,19 +24,17 @@ export class RolesGuard implements CanActivate {
       [context.getHandler(), context.getClass()],
     );
 
-    if (!requiredRoles) return true;
-
-    const request = context.switchToHttp().getRequest();
-    const user: User = request.user;
-
-    const userRoles: userRole[] =
-      user?.roles || (user?.roles ? [user.roles] : []);
-    const hasRole = requiredRoles.some((role) => userRoles.includes(role));
-
-    if (!hasRole) {
-      throw new ForbiddenException('kmau di di larang akses ini.');
+    if (!requiredRoles) {
+      return true;
     }
 
-    return true;
+    const request = context.switchToHttp().getRequest<RequestWithUser>();
+    const { user } = request;
+
+    if (!requiredRoles.includes(user.role)) {
+      throw new ForbiddenException('kamu di larang akses ini');
+    }
+
+    return requiredRoles.includes(user.role);
   }
 }
