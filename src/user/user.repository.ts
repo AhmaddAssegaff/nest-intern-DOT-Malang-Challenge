@@ -8,6 +8,7 @@ const SQL = {
   CREATE_USER:
     'INSERT INTO "user" (username, password) VALUES ($1, $2) RETURNING id, username, role, created_at',
   SELECT_USER_BY_ID: 'SELECT * FROM "user" WHERE id = $1',
+  SELECT_USER_BY_USERNAME: 'SELECT * FROM "user" WHERE username = $1',
 };
 
 @Injectable()
@@ -26,6 +27,13 @@ export class UserRepository {
   async selectOneUserById(id: string): Promise<InterfaceUsers> {
     const result: QueryResult<InterfaceUsers> =
       await this.databaseService.query(SQL.SELECT_USER_BY_ID, [id]);
+
+    return result.rows[0];
+  }
+
+  async selectOneUserByUsername(username: string): Promise<InterfaceUsers> {
+    const result: QueryResult<InterfaceUsers> =
+      await this.databaseService.query(SQL.SELECT_USER_BY_USERNAME, [username]);
 
     return result.rows[0];
   }

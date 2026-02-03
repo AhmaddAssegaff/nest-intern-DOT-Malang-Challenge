@@ -14,4 +14,8 @@ export class UserService {
   findUserById(id: string): Promise<InterfaceUsers> {
     return this.userRepository.selectOneUserById(id);
   }
+
+  findUserByUsername(username: string): Promise<InterfaceUsers> {
+    return this.userRepository.selectOneUserByUsername(username);
+  }
 }
