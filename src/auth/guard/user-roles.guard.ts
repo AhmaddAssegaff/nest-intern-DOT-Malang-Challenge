@@ -8,7 +8,7 @@ import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorator/roles.decorator';
 import { userRole } from '../../user/user.interface';
 
-export interface RequestWithUser extends Request {
+interface RequestWithUser extends Request {
   user: {
     role: userRole;
   };
