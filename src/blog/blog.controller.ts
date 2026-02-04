@@ -15,7 +15,7 @@ import { JwtAccessGuard } from 'src/auth/guard/jwt-access.guard';
 import { RolesGuard } from '../auth/guard/user-roles.guard';
 import { userRole } from '../user/user.interface';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
+import { CurrentUser } from '../auth/decorator/current-user.decorator';
 import {
   CreateBlogDto,
   GetBlogWithPagination,
