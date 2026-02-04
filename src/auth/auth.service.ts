@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { ConfigSchema } from 'src/config';
 import { JwtConfigI } from 'src/config/jwt.config';
-import { JwtPayload } from './jwt.interface';
+import { AuthResponse, JwtPayload } from './jwt.interface';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { userRole } from 'src/user/user.interface';
@@ -67,7 +67,7 @@ export class AuthService {
     }
   }
 
-  async login(loginRequestDto: LoginRequestDto) {
+  async login(loginRequestDto: LoginRequestDto): Promise<AuthResponse> {
     const { username, password } = loginRequestDto;
 
     const user = await this.userService.findUserByUsername(username);
@@ -98,7 +98,9 @@ export class AuthService {
     };
   }
 
-  async reqister(reqisterRequestDto: ReqisterRequestDto) {
+  async reqister(
+    reqisterRequestDto: ReqisterRequestDto,
+  ): Promise<AuthResponse> {
     const { username, password } = reqisterRequestDto;
 
     const existingUser = await this.userService.findUserByUsername(username);
@@ -131,7 +133,7 @@ export class AuthService {
     };
   }
 
-  async refreshToken(payload: JwtPayload) {
+  async refreshToken(payload: JwtPayload): Promise<AuthResponse> {
     const user = await this.userService.findUserById(payload.sub);
     if (!user) {
       throw new UnauthorizedException();

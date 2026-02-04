@@ -3,10 +3,17 @@ export enum userRole {
   admin = 'admin',
 }
 
-export interface InterfaceUsers {
+export interface userResponese {
   id: string;
   username: string;
   password: string;
   role: userRole;
+  created_at: Date;
+}
+
+export interface userProfileResponese {
+  id: string;
+  username: string;
+  role: string;
   created_at: Date;
 }

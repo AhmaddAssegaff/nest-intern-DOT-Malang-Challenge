@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { QueryResult } from 'pg';
 import { DatabaseService } from '../database/database.service';
 import { CreateUserDto } from './dto/createUser.dto';
-import { InterfaceUsers } from './user.interface';
+import { userResponese } from './user.interface';
 
 const SQL = {
   CREATE_USER:
@@ -13,26 +13,26 @@ const SQL = {
 
 @Injectable()
 export class UserRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly databaseService: DatabaseService) { }
 
-  async insertUser(createUserDto: CreateUserDto): Promise<InterfaceUsers> {
+  async insertUser(createUserDto: CreateUserDto): Promise<userResponese> {
     const { password, username } = createUserDto;
 
-    const result: QueryResult<InterfaceUsers> =
+    const result: QueryResult<userResponese> =
       await this.databaseService.query(SQL.CREATE_USER, [username, password]);
 
     return result.rows[0];
   }
 
-  async selectOneUserById(id: string): Promise<InterfaceUsers> {
-    const result: QueryResult<InterfaceUsers> =
+  async selectOneUserById(id: string): Promise<userResponese> {
+    const result: QueryResult<userResponese> =
       await this.databaseService.query(SQL.SELECT_USER_BY_ID, [id]);
 
     return result.rows[0];
   }
 
-  async selectOneUserByUsername(username: string): Promise<InterfaceUsers> {
-    const result: QueryResult<InterfaceUsers> =
+  async selectOneUserByUsername(username: string): Promise<userResponese> {
+    const result: QueryResult<userResponese> =
       await this.databaseService.query(SQL.SELECT_USER_BY_USERNAME, [username]);
 
     return result.rows[0];

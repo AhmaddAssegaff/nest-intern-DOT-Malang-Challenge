@@ -11,10 +11,10 @@ import {
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
-import { Roles } from 'src/auth/decorator/roles.decorator';
+import { Roles } from '../auth/decorator/roles.decorator';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access.guard';
-import { RolesGuard } from 'src/auth/guard/user-roles.guard';
-import { userRole } from 'src/user/user.interface';
+import { RolesGuard } from '../auth/guard/user-roles.guard';
+import { userRole } from '../user/user.interface';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiBearerAuth('access-token')
