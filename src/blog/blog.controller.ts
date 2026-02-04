@@ -7,45 +7,66 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
-import { CreateBlogDto } from './dto/create-blog.dto';
-import { UpdateBlogDto } from './dto/update-blog.dto';
 import { Roles } from '../auth/decorator/roles.decorator';
 import { JwtAccessGuard } from 'src/auth/guard/jwt-access.guard';
 import { RolesGuard } from '../auth/guard/user-roles.guard';
 import { userRole } from '../user/user.interface';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
+import {
+  CreateBlogDto,
+  GetBlogWithPagination,
+  UpdateBlogDto,
+} from './dto/blog.dto';
 
 @ApiBearerAuth('access-token')
 @Controller('blog')
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
+  @Roles(userRole.user)
+  @UseGuards(JwtAccessGuard, RolesGuard)
   @Post()
-  create(@Body() createBlogDto: CreateBlogDto) {
-    return this.blogService.create(createBlogDto);
+  postBlog(
+    @CurrentUser('sub') userId: string,
+    @Body() createBlogDto: CreateBlogDto,
+  ) {
+    return this.blogService.createBlog(createBlogDto, userId);
   }
 
   @Get()
-  findAll() {
-    return this.blogService.findAll();
+  getManyBlogWithPagination(
+    @Query() getBlogWithPagination: GetBlogWithPagination,
+  ) {
+    return this.blogService.findBlogWithPagination(getBlogWithPagination);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.blogService.findOne(+id);
+  getOneBlogById(@Param('id') id: string) {
+    return this.blogService.findOneBlogById(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto) {
-    return this.blogService.update(+id, updateBlogDto);
-  }
-
+  @Roles(userRole.user)
   @UseGuards(JwtAccessGuard, RolesGuard)
+  @Patch(':id')
+  patchOneBlogById(
+    @CurrentUser('sub') userId: string,
+    @Param('id') blogId: string,
+    @Body() updateBlogDto: UpdateBlogDto,
+  ) {
+    return this.blogService.updateOneBlogById(updateBlogDto, userId, blogId);
+  }
+
   @Roles(userRole.admin)
+  @UseGuards(JwtAccessGuard, RolesGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.blogService.remove(+id);
+  deleteOneBlogById(
+    @CurrentUser('sub') userId: string,
+    @Param('id') blogId: string,
+  ) {
+    return this.blogService.removeOneBlogById(blogId, userId);
   }
 }

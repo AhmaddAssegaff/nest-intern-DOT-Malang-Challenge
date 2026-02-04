@@ -1,26 +1,44 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBlogDto } from './dto/create-blog.dto';
-import { UpdateBlogDto } from './dto/update-blog.dto';
+import { BlogRepository } from './blog.repository';
+import {
+  CreateBlogDto,
+  GetBlogWithPagination,
+  UpdateBlogDto,
+} from './dto/blog.dto';
+import { blogRespone } from './blog.interface';
 
 @Injectable()
 export class BlogService {
-  create(createBlogDto: CreateBlogDto) {
-    return 'This action adds a new blog';
+  constructor(private readonly blogRepository: BlogRepository) {}
+
+  createBlog(
+    createBlogDto: CreateBlogDto,
+    userId: string,
+  ): Promise<blogRespone> {
+    return this.blogRepository.insertBlog(createBlogDto, userId);
   }
 
-  findAll() {
-    return `This action returns all blog`;
+  findBlogWithPagination(
+    getBlogWithPagination: GetBlogWithPagination,
+  ): Promise<blogRespone[]> {
+    return this.blogRepository.selectManyBlogWithPagination(
+      getBlogWithPagination,
+    );
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} blog`;
+  findOneBlogById(blogId: string): Promise<blogRespone> {
+    return this.blogRepository.selectOneBlogById(blogId);
   }
 
-  update(id: number, updateBlogDto: UpdateBlogDto) {
-    return `This action updates a #${id} blog`;
+  updateOneBlogById(
+    updateBlogDto: UpdateBlogDto,
+    userId: string,
+    blogId: string,
+  ): Promise<blogRespone> {
+    return this.blogRepository.setBlogById(updateBlogDto, userId, blogId);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} blog`;
+  removeOneBlogById(blogId: string, userId: string): Promise<blogRespone> {
+    return this.blogRepository.deleteOneBlogById(blogId, userId);
   }
 }

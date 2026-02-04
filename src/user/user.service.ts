@@ -5,7 +5,7 @@ import { userResponese, userProfileResponese } from './user.interface';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) { }
+  constructor(private readonly userRepository: UserRepository) {}
 
   createUser(createUserDto: CreateUserDto): Promise<userResponese> {
     return this.userRepository.insertUser(createUserDto);
@@ -18,6 +18,7 @@ export class UserService {
   findUserByUsername(username: string): Promise<userResponese> {
     return this.userRepository.selectOneUserByUsername(username);
   }
+
   async findProfile(id: string): Promise<userProfileResponese> {
     const user = await this.userRepository.selectOneUserById(id);
 

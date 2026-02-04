@@ -1,6 +1,6 @@
 ## Nameing convesion method : 
 ### Controller = HTTP verb (get, post, patch, delete)
-### Service = business action (find, create, update, delete)
+### Service = business action (find, create, update, remove)
 ### Repository = DB action (select, insert, set, delete)
 
 <p align="center">

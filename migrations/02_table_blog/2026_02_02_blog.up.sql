@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS blog (
-  id UUID PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title VARCHAR(150) NOT NULL,
   content TEXT NOT NULL,
   author_id UUID NOT NULL,
