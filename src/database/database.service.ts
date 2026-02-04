@@ -53,8 +53,12 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleDestroy() {
-    await this.pool?.end();
-    Logger.fatal('PostgreSQL pool has been closed');
+    try {
+      await this.pool?.end();
+      Logger.log('PostgreSQL pool closed');
+    } catch (error) {
+      Logger.error('Error closing PostgreSQL pool', error);
+    }
   }
 
   query<T extends QueryResultRow = QueryResultRow>(
