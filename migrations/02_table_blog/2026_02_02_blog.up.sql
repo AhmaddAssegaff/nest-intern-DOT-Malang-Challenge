@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS blog (
 
   CONSTRAINT fk_blog_author
     FOREIGN KEY (author_id)
-    REFERENCES "user"(id)
+    REFERENCES users(id)
 );
