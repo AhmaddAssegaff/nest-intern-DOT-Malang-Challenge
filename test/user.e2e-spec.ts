@@ -25,7 +25,7 @@ describe.each(versions)('User E2E - login -> profile ', (version) => {
     await app.close();
   });
 
-  it('POST /api/v1/auth/login -> success', async () => {
+  it('POST /api/v1/auth/login : should login successfully and return access tokens', async () => {
     const res = await request(app.getHttpServer())
       .post(`/api/${version}/auth/login`)
       .send({
@@ -45,7 +45,7 @@ describe.each(versions)('User E2E - login -> profile ', (version) => {
     expect(refreshToken).toBeDefined();
   });
 
-  it('GET /api/user/me', async () => {
+  it('GET /api/user/me : should return user profile when authenticated', async () => {
     const res = await request(app.getHttpServer())
       .get(`/api/${version}/user/me`)
       .set('Authorization', `Bearer ${accessToken}`);

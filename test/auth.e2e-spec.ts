@@ -25,7 +25,7 @@ describe.each(versions)('Auth E2E - login | Register -> refresh', (version) => {
     await app.close();
   });
 
-  it('POST /api/v1/auth/login -> success', async () => {
+  it('POST /api/v1/auth/login : should login successfully and return access & refresh tokens', async () => {
     const res = await request(app.getHttpServer())
       .post(`/api/${version}/auth/login`)
       .send({
@@ -45,7 +45,7 @@ describe.each(versions)('Auth E2E - login | Register -> refresh', (version) => {
     expect(refreshToken).toBeDefined();
   });
 
-  it('POST /api/v1/auth/reqister -> success', async () => {
+  it('POST /api/v1/auth/reqister : should register a new user and return access & refresh tokens', async () => {
     const res = await request(app.getHttpServer())
       .post(`/api/${version}/auth/reqister`)
       .send({
@@ -65,7 +65,7 @@ describe.each(versions)('Auth E2E - login | Register -> refresh', (version) => {
     expect(refreshToken).toBeDefined();
   });
 
-  it('GET /api/v1/auth/refresh -> success', async () => {
+  it('GET /api/v1/auth/refresh should return new access & refresh tokens', async () => {
     const res = await request(app.getHttpServer())
       .post(`/api/${version}/auth/refresh`)
       .set('Authorization', `Bearer ${refreshToken}`);
