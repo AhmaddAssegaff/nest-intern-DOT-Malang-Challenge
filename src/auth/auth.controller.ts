@@ -17,11 +17,11 @@ export class AuthController {
   }
 
   @Post('/reqister')
-  @HttpCode(200)
   reqister(@Body() reqisterRequestDto: ReqisterRequestDto) {
     return this.authService.reqister(reqisterRequestDto);
   }
 
+  @HttpCode(200)
   @ApiBearerAuth('refresh-token')
   @Post('/refresh')
   @UseGuards(JwtRefreshGuard)
