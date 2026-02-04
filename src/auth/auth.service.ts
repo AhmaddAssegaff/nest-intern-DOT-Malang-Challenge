@@ -11,7 +11,7 @@ import { JwtConfigI } from 'src/config/jwt.config';
 import { AuthResponse, JwtPayload } from './jwt.interface';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
-import { userRole } from 'src/user/user.interface';
+import { userRole } from '../user/user.interface';
 
 @Injectable()
 export class AuthService {
