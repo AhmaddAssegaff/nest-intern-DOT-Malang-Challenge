@@ -35,7 +35,7 @@ export class UpdateBlogDto extends PartialType(CreateBlogDto) {
   content?: string;
 }
 
-export class GetBlogWithPagination {
+export class GetBlogWithPaginationDto {
   @IsOptional()
   @Type(() => Number)
   @IsInt()
@@ -48,3 +48,5 @@ export class GetBlogWithPagination {
   @Min(1)
   limit?: number = 10;
 }
+
+export class GetBlogWithPaginationUserDto extends GetBlogWithPaginationDto {}

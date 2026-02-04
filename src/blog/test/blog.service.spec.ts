@@ -3,7 +3,7 @@ import { BlogService } from '../blog.service';
 import { BlogRepository } from '../blog.repository';
 import {
   CreateBlogDto,
-  GetBlogWithPagination,
+  GetBlogWithPaginationDto,
   UpdateBlogDto,
 } from '../dto/blog.dto';
 
@@ -13,6 +13,7 @@ describe('BlogService', () => {
   const blogRepositoryMock = {
     insertBlog: jest.fn().mockResolvedValue({}),
     selectManyBlogWithPagination: jest.fn().mockResolvedValue([]),
+    selectManyBlogWithPaginationUser: jest.fn().mockResolvedValue([]),
     selectOneBlogById: jest.fn().mockResolvedValue({}),
     setBlogById: jest.fn().mockResolvedValue({}),
     deleteOneBlogById: jest.fn().mockResolvedValue({}),
@@ -55,7 +56,7 @@ describe('BlogService', () => {
 
   describe('findBlogWithPagination', () => {
     it('should only call selectManyBlogWithPagination', async () => {
-      const dto: GetBlogWithPagination = { page: 1, limit: 5 };
+      const dto: GetBlogWithPaginationDto = { page: 1, limit: 5 };
 
       await service.findBlogWithPagination(dto);
 
@@ -67,6 +68,33 @@ describe('BlogService', () => {
       ).toHaveBeenCalledTimes(1);
 
       expect(blogRepositoryMock.insertBlog).not.toHaveBeenCalled();
+      expect(
+        blogRepositoryMock.selectManyBlogWithPaginationUser,
+      ).not.toHaveBeenCalled();
+      expect(blogRepositoryMock.selectOneBlogById).not.toHaveBeenCalled();
+      expect(blogRepositoryMock.setBlogById).not.toHaveBeenCalled();
+      expect(blogRepositoryMock.deleteOneBlogById).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('findBlogWithPaginationUser', () => {
+    it('should only call selectManyBlogWithPaginationUser', async () => {
+      const userId = '919c4daf-0267-4b15-9e08-2babc241bedf';
+      const dto: GetBlogWithPaginationDto = { page: 1, limit: 5 };
+
+      await service.findBlogWithPaginationUser(dto, userId);
+
+      expect(
+        blogRepositoryMock.selectManyBlogWithPaginationUser,
+      ).toHaveBeenCalledWith(dto, userId);
+      expect(
+        blogRepositoryMock.selectManyBlogWithPaginationUser,
+      ).toHaveBeenCalledTimes(1);
+
+      expect(blogRepositoryMock.insertBlog).not.toHaveBeenCalled();
+      expect(
+        blogRepositoryMock.selectManyBlogWithPagination,
+      ).not.toHaveBeenCalled();
       expect(blogRepositoryMock.selectOneBlogById).not.toHaveBeenCalled();
       expect(blogRepositoryMock.setBlogById).not.toHaveBeenCalled();
       expect(blogRepositoryMock.deleteOneBlogById).not.toHaveBeenCalled();
@@ -83,6 +111,9 @@ describe('BlogService', () => {
       expect(blogRepositoryMock.selectOneBlogById).toHaveBeenCalledTimes(1);
 
       expect(blogRepositoryMock.insertBlog).not.toHaveBeenCalled();
+      expect(
+        blogRepositoryMock.selectManyBlogWithPaginationUser,
+      ).not.toHaveBeenCalled();
       expect(
         blogRepositoryMock.selectManyBlogWithPagination,
       ).not.toHaveBeenCalled();
@@ -110,6 +141,9 @@ describe('BlogService', () => {
       expect(
         blogRepositoryMock.selectManyBlogWithPagination,
       ).not.toHaveBeenCalled();
+      expect(
+        blogRepositoryMock.selectManyBlogWithPaginationUser,
+      ).not.toHaveBeenCalled();
       expect(blogRepositoryMock.selectOneBlogById).not.toHaveBeenCalled();
       expect(blogRepositoryMock.deleteOneBlogById).not.toHaveBeenCalled();
     });
@@ -131,6 +165,9 @@ describe('BlogService', () => {
       expect(blogRepositoryMock.insertBlog).not.toHaveBeenCalled();
       expect(
         blogRepositoryMock.selectManyBlogWithPagination,
+      ).not.toHaveBeenCalled();
+      expect(
+        blogRepositoryMock.selectManyBlogWithPaginationUser,
       ).not.toHaveBeenCalled();
       expect(blogRepositoryMock.selectOneBlogById).not.toHaveBeenCalled();
       expect(blogRepositoryMock.setBlogById).not.toHaveBeenCalled();

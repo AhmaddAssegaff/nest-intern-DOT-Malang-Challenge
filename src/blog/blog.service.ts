@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { BlogRepository } from './blog.repository';
 import {
   CreateBlogDto,
-  GetBlogWithPagination,
+  GetBlogWithPaginationDto,
+  GetBlogWithPaginationUserDto,
   UpdateBlogDto,
 } from './dto/blog.dto';
 import { blogRespone } from './blog.interface';
@@ -19,10 +20,20 @@ export class BlogService {
   }
 
   findBlogWithPagination(
-    getBlogWithPagination: GetBlogWithPagination,
+    getBlogWithPagination: GetBlogWithPaginationDto,
   ): Promise<blogRespone[]> {
     return this.blogRepository.selectManyBlogWithPagination(
       getBlogWithPagination,
+    );
+  }
+
+  findBlogWithPaginationUser(
+    getBlogWithPaginationUserDto: GetBlogWithPaginationUserDto,
+    userId: string,
+  ): Promise<blogRespone[]> {
+    return this.blogRepository.selectManyBlogWithPaginationUser(
+      getBlogWithPaginationUserDto,
+      userId,
     );
   }
 

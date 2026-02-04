@@ -18,7 +18,8 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { CurrentUser } from '../auth/decorator/current-user.decorator';
 import {
   CreateBlogDto,
-  GetBlogWithPagination,
+  GetBlogWithPaginationDto,
+  GetBlogWithPaginationUserDto,
   UpdateBlogDto,
 } from './dto/blog.dto';
 
@@ -39,9 +40,22 @@ export class BlogController {
 
   @Get()
   getManyBlogWithPagination(
-    @Query() getBlogWithPagination: GetBlogWithPagination,
+    @Query() getBlogWithPagination: GetBlogWithPaginationDto,
   ) {
     return this.blogService.findBlogWithPagination(getBlogWithPagination);
+  }
+
+  @Roles(userRole.user)
+  @UseGuards(JwtAccessGuard, RolesGuard)
+  @Get('me')
+  getManyBlogWithPaginationUser(
+    @CurrentUser('sub') userId: string,
+    @Query() getBlogWithPaginationUser: GetBlogWithPaginationUserDto,
+  ) {
+    return this.blogService.findBlogWithPaginationUser(
+      getBlogWithPaginationUser,
+      userId,
+    );
   }
 
   @Get(':id')

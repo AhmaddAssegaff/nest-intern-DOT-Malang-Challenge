@@ -9,7 +9,7 @@ import { UserService } from './user.service';
 @UseGuards(JwtAccessGuard)
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Get('me')
   getProfile(@CurrentUser() token: JwtPayload) {

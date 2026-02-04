@@ -4,7 +4,8 @@ import { DatabaseService } from '../database/database.service';
 import { blogRespone } from './blog.interface';
 import {
   CreateBlogDto,
-  GetBlogWithPagination,
+  GetBlogWithPaginationDto,
+  GetBlogWithPaginationUserDto,
   UpdateBlogDto,
 } from './dto/blog.dto';
 
@@ -15,6 +16,8 @@ const SQL = {
     'SELECT * FROM "blog" WHERE id = $1 AND is_deleted = FALSE',
   SELECT_BLOG_PAGINATION:
     'SELECT * FROM "blog" WHERE is_deleted = FALSE ORDER BY created_at DESC LIMIT $1 OFFSET $2',
+  SELECT_BLOG_PAGINATION_USER:
+    'SELECT * FROM "blog" WHERE is_deleted = FALSE AND author_id = $3 ORDER BY created_at DESC LIMIT $1 OFFSET $2',
   UPDATE_BLOG_BY_ID:
     'UPDATE "blog" SET title = $1, content = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 AND author_id = $4 RETURNING *',
   DELETE_BLOG_BY_ID:
@@ -40,7 +43,7 @@ export class BlogRepository {
   }
 
   async selectManyBlogWithPagination(
-    getBlogWithPagination: GetBlogWithPagination,
+    getBlogWithPagination: GetBlogWithPaginationDto,
   ): Promise<blogRespone[]> {
     const { limit, page } = getBlogWithPagination;
 
@@ -52,6 +55,25 @@ export class BlogRepository {
     const result: QueryResult<blogRespone> = await this.databaseService.query(
       SQL.SELECT_BLOG_PAGINATION,
       [defalutLimit, offset],
+    );
+
+    return result.rows;
+  }
+
+  async selectManyBlogWithPaginationUser(
+    getBlogWithPaginationUser: GetBlogWithPaginationUserDto,
+    userId: string,
+  ): Promise<blogRespone[]> {
+    const { limit, page } = getBlogWithPaginationUser;
+
+    const defalutLimit = limit ?? 10;
+    const defalutPage = page ?? 1;
+
+    const offset = (defalutPage - 1) * defalutLimit;
+
+    const result: QueryResult<blogRespone> = await this.databaseService.query(
+      SQL.SELECT_BLOG_PAGINATION_USER,
+      [defalutLimit, offset, userId],
     );
 
     return result.rows;
