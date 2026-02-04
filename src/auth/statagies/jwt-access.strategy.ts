@@ -6,11 +6,12 @@ import { ConfigSchema } from 'src/config';
 import { JwtConfigI } from 'src/config/jwt.config';
 import { JwtPayload } from '../jwt.interface';
 import { UserService } from 'src/user/user.service';
+import { JWT_ACCESS_TOKEN_STRATEGY } from '../constant';
 
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(
   Strategy,
-  'jwt-access',
+  JWT_ACCESS_TOKEN_STRATEGY,
 ) {
   constructor(
     private readonly configService: ConfigService<ConfigSchema>,

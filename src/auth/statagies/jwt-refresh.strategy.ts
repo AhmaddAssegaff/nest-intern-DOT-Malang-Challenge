@@ -6,11 +6,12 @@ import { ConfigSchema } from 'src/config';
 import { JwtConfigI } from 'src/config/jwt.config';
 import { JwtPayload } from '../jwt.interface';
 import { UserService } from '../../user/user.service';
+import { JWT_REFRESH_TOKEN_STRATEGY } from '../constant';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
   Strategy,
-  'jwt-refresh',
+  JWT_REFRESH_TOKEN_STRATEGY,
 ) {
   constructor(
     private readonly configService: ConfigService<ConfigSchema>,
