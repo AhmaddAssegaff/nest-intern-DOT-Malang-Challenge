@@ -2,13 +2,13 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SWAGGER_CONFIG } from '../config/swagger.config';
-import { ConfigSchema } from '../config/index';
+import { CONSTANTS } from '../config/index';
 
 export function createDocument(app: INestApplication) {
-  const configService = app.get(ConfigService<ConfigSchema>);
-  const SWAGGER_PATH = configService.getOrThrow('swagger.SWAGGER_DOCS_URL', {
-    infer: true,
-  });
+  const config = app.get(ConfigService);
+  const SWAGGER_PATH = config.getOrThrow<string>(
+    CONSTANTS.SWAGGER.SWAGGER_DOCS_URL,
+  );
 
   const builder = new DocumentBuilder()
     .setTitle(SWAGGER_CONFIG.title)
