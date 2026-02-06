@@ -13,7 +13,7 @@ export class JwtAccessStrategy extends PassportStrategy(
   JWT_ACCESS_TOKEN_STRATEGY,
 ) {
   constructor(
-    private readonly config: ConfigService,
+    config: ConfigService,
     private readonly userService: UserService,
   ) {
     super({
