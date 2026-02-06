@@ -30,7 +30,7 @@ describe('Auth E2E', () => {
       const res = await request(app.getHttpServer())
         .post(`/api/${version}/auth/login`)
         .send({
-          username: 'Ahmad',
+          username: 'user test',
           password: 'password',
         });
 

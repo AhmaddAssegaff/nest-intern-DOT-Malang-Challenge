@@ -37,7 +37,7 @@ describe('Blog E2E', () => {
       const res = await request(app.getHttpServer())
         .post(`/api/${version}/auth/login`)
         .send({
-          username: 'Ahmad',
+          username: 'user test',
           password: 'password',
         });
 
@@ -114,7 +114,7 @@ describe('Blog E2E', () => {
       const res = await request(app.getHttpServer())
         .post(`/api/${version}/auth/login`)
         .send({
-          username: 'admin',
+          username: 'admin test',
           password: 'password',
         });
 
