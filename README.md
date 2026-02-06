@@ -34,6 +34,8 @@ sehingga di module auth saya tidak menerapkannya
 ## Project setup
 
 ```bash
+# clone this repo
+$ https://github.com/AhmaddAssegaff/nest-intern-DOT-Malang-Challenge.git
 # install pakage
 $ pnpm install
 # create db and pgadmin container
