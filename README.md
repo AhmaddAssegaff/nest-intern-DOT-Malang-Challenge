@@ -1,8 +1,8 @@
-## Project ini menggunakan Repository Pattern untuk memisahkan business logic dan data access logic, sehingga setiap layer memiliki tanggung jawab yang jelas.
+### Project ini menggunakan **Repository Pattern** untuk memisahkan *business logic* dan *data access logic*, sehingga setiap layer memiliki tanggung jawab yang jelas.
 Kenapa saya suka memisahkan dua hal ini : 
 
-Business logic : di Service
-Data access logic : di Repository
+- **Business logic** : di Service  
+- **Data access logic** : di Repository
 
 dengan hal di atas jadi :
 business logic terisolasi sehingga jadi lebih jelas kegunaan service sebagai business logic
@@ -10,20 +10,23 @@ Hal ini membuat kode lebih bersih, terstruktur, dan mudah dipahami.
 
 tetapi tidak overengineering
 
-## convesion method yang di gunakan : 
-Controller = HTTP verb (get, post, patch, delete)
-Service = business action (find, create, update, remove)
-Repository = DB action (select, insert, set, delete)
+### convesion method yang di gunakan : 
+- **Controller** : HTTP verb (`get`, `post`, `patch`, `delete`)
+- **Service** : business action (`find`, `create`, `update`, `remove`)
+- **Repository** : DB action (`select`, `insert`, `update`, `delete`)
 
-## convesion dalam membuat nama variable, method class dll yang di gunakan : 
-constant variable = UPPER_SNAKE_CASE
-Class / DTO / Interface = ConfigurationModule 
-File & folder = kebab-case di ikuti dengan jenis filenya (.dto, .module .guard dll)
+### convesion dalam membuat nama variable, method class dll yang di gunakan : 
+- **Constant variable** : `UPPER_SNAKE_CASE` (contoh : file constant.ts di module auth)
+- **Class / DTO / Interface** : `PascalCase` (contoh: `ConfigurationModule`)
+- **File & folder** : `kebab-case` (contoh : `.dto.ts`, `.module.ts`, `.guard.ts`)
 
 Aturan konvensi di atas tidak bersifat mutlak dan dapat disesuaikan dengan konteks.
 Sebagai contoh, pada modul auth, beberapa convesion tidak digunakan karena kurang cocok secara semantik, misalnya:
 
+```ts
 postLogin(){}
+
+```
 dan method lain 
 
 ## Project setup
