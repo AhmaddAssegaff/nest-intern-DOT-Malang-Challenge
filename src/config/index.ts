@@ -7,7 +7,7 @@ import * as db from './database.config';
 import * as jwt from './jwt.config';
 
 export const configs = [
-  app.appConfig,
+  app.default,
   swg.swaggerConfig,
   db.default,
   jwt.jwtConfig,
@@ -21,13 +21,12 @@ export const validationSchema = Joi.object({
 });
 
 export interface ConfigSchema {
-  [app.APP_CONFIG_NAME_KEY]: app.AppConfigI;
   [swg.SWAGGER_CONFIG_NAME_KEY]: swg.SwaggerConfigI;
   [jwt.APP_CONFIG_NAME_KEY]: jwt.JwtConfigI;
 }
 
 export const CONSTANTS = {
-  // ...app.CONSTANTS_APP_KEYS,
+  ...app.CONSTANTS_APP_KEYS,
   ...db.CONSTANTS_DATABASE_KEYS,
   // ...jwt.CONSTANTS_JWT_KEYS,
 } as const;

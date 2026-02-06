@@ -2,23 +2,25 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ConfigSchema } from './config';
 import { createDocument } from './swagger/swagger';
+import { CONSTANTS } from 'src/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const configService = app.get(ConfigService);
-  const appConfig = configService.getOrThrow<ConfigSchema['app']>('app');
+  const config = app.get(ConfigService);
 
-  const env = appConfig.mode;
-  const PORT = appConfig.port;
+  const appMode = config.getOrThrow<string>(CONSTANTS.APP.mode);
 
-  const defaultVersion = appConfig.defaultVersion;
-  const enableVersion = appConfig.enableVersion;
+  const port = config.getOrThrow<string>(CONSTANTS.APP.port);
 
-  const globalPrefix = appConfig.globalPrefix;
-  const versionPrefix = appConfig.versionPrefix;
+  const defaultVersion = config.getOrThrow<string>(
+    CONSTANTS.APP.defaultVersion,
+  );
+  const enableVersion = config.getOrThrow<string>(CONSTANTS.APP.enableVersion);
+
+  const globalPrefix = config.getOrThrow<string>(CONSTANTS.APP.globalPrefix);
+  const versionPrefix = config.getOrThrow<string>(CONSTANTS.APP.versionPrefix);
 
   app.setGlobalPrefix(globalPrefix);
 
@@ -30,7 +32,7 @@ async function bootstrap() {
     });
   }
 
-  if (env === 'development') {
+  if (appMode === 'development') {
     createDocument(app);
   }
 
@@ -42,9 +44,9 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(appConfig.port);
+  await app.listen(port);
 
-  Logger.log(`Running in ${env} mode`, 'Bootstrap');
-  Logger.log(`Application listening on port ${PORT}`, 'Bootstrap');
+  Logger.log(`Running in ${appMode} mode`, 'Bootstrap');
+  Logger.log(`Application listening on port ${port}`, 'Bootstrap');
 }
 void bootstrap();

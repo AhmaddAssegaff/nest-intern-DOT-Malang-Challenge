@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import * as Joi from 'joi';
 
-export const APP_CONFIG_NAME_KEY = 'app';
+export const APP_CONFIG_NAME_KEY = 'app' as const;
 
 export interface AppConfigI {
   port: number;
@@ -23,7 +23,7 @@ export const appValidationSchema = {
   DEFAULT_VERSION: Joi.string().required(),
 };
 
-export const appConfig = registerAs<AppConfigI>(
+export default registerAs<AppConfigI>(
   APP_CONFIG_NAME_KEY,
   (): AppConfigI => ({
     port: Number(process.env.APP_PORT),
@@ -35,4 +35,19 @@ export const appConfig = registerAs<AppConfigI>(
   }),
 );
 
-export default appConfig;
+type AppKey = keyof AppConfigI;
+
+export const CONSTANTS_APP_KEYS: {
+  APP: {
+    [K in AppKey]: `${typeof APP_CONFIG_NAME_KEY}.${K}`;
+  };
+} = {
+  APP: {
+    defaultVersion: 'app.defaultVersion',
+    enableVersion: 'app.enableVersion',
+    globalPrefix: 'app.globalPrefix',
+    mode: 'app.mode',
+    port: 'app.port',
+    versionPrefix: 'app.versionPrefix',
+  },
+} as const;
