@@ -34,8 +34,10 @@ sehingga di module auth saya tidak menerapkannya
 ## Project setup
 
 ```bash
-# isntall pakage
+# install pakage
 $ pnpm install
+# create db and pgadmin container
+$ docker compose up -d
 # migrations
 $ pnpm migrate:push
 # test e2e
@@ -45,6 +47,8 @@ $ pnpm test
 # run project watch mode
 $ pnpm run start:dev
 ```
+
+- **Buka swagger docs di** : http://localhost:3000/docs
 
 ## Compile and run the project
 
