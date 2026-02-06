@@ -4,12 +4,12 @@ import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { AuthResponse } from 'src/auth/jwt.interface';
 
-const versions = ['v1'];
-
-describe.each(versions)('Auth E2E - login | Register -> refresh', (version) => {
+describe('Auth E2E', () => {
   let app: INestApplication;
   let accessToken: string;
   let refreshToken: string;
+
+  const version = 'v1';
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -25,60 +25,61 @@ describe.each(versions)('Auth E2E - login | Register -> refresh', (version) => {
     await app.close();
   });
 
-  it('POST /api/v1/auth/login : should login successfully and return access & refresh tokens', async () => {
-    const res = await request(app.getHttpServer())
-      .post(`/api/${version}/auth/login`)
-      .send({
-        username: 'Ahmad',
-        password: 'password',
-      });
+  describe('POST /api/v1/auth/login', () => {
+    it('should login successfully and return access & refresh tokens', async () => {
+      const res = await request(app.getHttpServer())
+        .post(`/api/${version}/auth/login`)
+        .send({
+          username: 'Ahmad',
+          password: 'password',
+        });
 
-    const body = res.body as AuthResponse;
+      const body = res.body as AuthResponse;
 
-    expect(res.status).toBe(200);
-    expect(res.body).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.body).toBeDefined();
 
-    accessToken = body.tokens.accessToken;
-    refreshToken = body.tokens.refreshToken;
+      accessToken = body.tokens.accessToken;
+      refreshToken = body.tokens.refreshToken;
 
-    expect(accessToken).toBeDefined();
-    expect(refreshToken).toBeDefined();
+      expect(accessToken).toBeDefined();
+      expect(refreshToken).toBeDefined();
+    });
   });
 
-  it('POST /api/v1/auth/reqister : should register a new user and return access & refresh tokens', async () => {
-    const res = await request(app.getHttpServer())
-      .post(`/api/${version}/auth/reqister`)
-      .send({
-        username: `e2e_${version}_${Date.now()}`,
-        password: 'password',
-      });
+  describe('POST /api/v1/auth/reqister', () => {
+    it('should register a new user and return access & refresh tokens', async () => {
+      const res = await request(app.getHttpServer())
+        .post(`/api/${version}/auth/reqister`)
+        .send({
+          username: `e2e_${version}_${Date.now()}`,
+          password: 'password',
+        });
 
-    const body = res.body as AuthResponse;
+      const body = res.body as AuthResponse;
 
-    expect(res.status).toBe(201);
-    expect(res.body).toBeDefined();
+      expect(res.status).toBe(201);
+      expect(res.body).toBeDefined();
 
-    accessToken = body.tokens.accessToken;
-    refreshToken = body.tokens.refreshToken;
+      accessToken = body.tokens.accessToken;
+      refreshToken = body.tokens.refreshToken;
 
-    expect(accessToken).toBeDefined();
-    expect(refreshToken).toBeDefined();
+      expect(accessToken).toBeDefined();
+      expect(refreshToken).toBeDefined();
+    });
   });
 
-  it('GET /api/v1/auth/refresh should return new access & refresh tokens', async () => {
-    const res = await request(app.getHttpServer())
-      .post(`/api/${version}/auth/refresh`)
-      .set('Authorization', `Bearer ${refreshToken}`);
+  describe('GET /api/v1/auth/refresh', () => {
+    it('should return new access & refresh tokens', async () => {
+      const res = await request(app.getHttpServer())
+        .post(`/api/${version}/auth/refresh`)
+        .set('Authorization', `Bearer ${refreshToken}`);
 
-    expect(res.status).toBe(200);
-    expect(res.body).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.body).toBeDefined();
 
-    const body = res.body as AuthResponse;
-
-    accessToken = body.tokens.accessToken;
-    refreshToken = body.tokens.refreshToken;
-
-    expect(accessToken).toBeDefined();
-    expect(refreshToken).toBeDefined();
+      expect(accessToken).toBeDefined();
+      expect(refreshToken).toBeDefined();
+    });
   });
 });

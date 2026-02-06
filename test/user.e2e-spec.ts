@@ -4,12 +4,12 @@ import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { AuthResponse } from 'src/auth/jwt.interface';
 
-const versions = ['v1'];
-
-describe.each(versions)('User E2E - login -> profile ', (version) => {
+describe('User E2E', () => {
   let app: INestApplication;
   let accessToken: string;
   let refreshToken: string;
+
+  const version = 'v1';
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -25,32 +25,36 @@ describe.each(versions)('User E2E - login -> profile ', (version) => {
     await app.close();
   });
 
-  it('POST /api/v1/auth/login : should login successfully and return access tokens', async () => {
-    const res = await request(app.getHttpServer())
-      .post(`/api/${version}/auth/login`)
-      .send({
-        username: 'Ahmad',
-        password: 'password',
-      });
+  describe('POST /api/v1/auth/login', () => {
+    it('should login successfully and return access tokens', async () => {
+      const res = await request(app.getHttpServer())
+        .post(`/api/${version}/auth/login`)
+        .send({
+          username: 'Ahmad',
+          password: 'password',
+        });
 
-    const body = res.body as AuthResponse;
+      const body = res.body as AuthResponse;
 
-    expect(res.status).toBe(200);
-    expect(res.body).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.body).toBeDefined();
 
-    accessToken = body.tokens.accessToken;
-    refreshToken = body.tokens.refreshToken;
+      accessToken = body.tokens.accessToken;
+      refreshToken = body.tokens.refreshToken;
 
-    expect(accessToken).toBeDefined();
-    expect(refreshToken).toBeDefined();
+      expect(accessToken).toBeDefined();
+      expect(refreshToken).toBeDefined();
+    });
   });
 
-  it('GET /api/user/me : should return user profile when authenticated', async () => {
-    const res = await request(app.getHttpServer())
-      .get(`/api/${version}/user/me`)
-      .set('Authorization', `Bearer ${accessToken}`);
+  describe('GET /api/v1/user/me', () => {
+    it('should return user profile when authenticated', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`/api/${version}/user/me`)
+        .set('Authorization', `Bearer ${accessToken}`);
 
-    expect(res.status).toBe(200);
-    expect(res.body).toBeDefined();
+      expect(res.status).toBe(200);
+      expect(res.body).toBeDefined();
+    });
   });
 });

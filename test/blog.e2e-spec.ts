@@ -33,7 +33,7 @@ describe('Blog E2E', () => {
   });
 
   describe('POST /api/v1/auth/login', () => {
-    it('should user login successfully and return access tokens', async () => {
+    it('should user login as user successfully and return access tokens', async () => {
       const res = await request(app.getHttpServer())
         .post(`/api/${version}/auth/login`)
         .send({
@@ -110,7 +110,7 @@ describe('Blog E2E', () => {
   });
 
   describe('POST /api/v1/auth/login', () => {
-    it('should user admin login successfully and return access tokens', async () => {
+    it('should user login as admin successfully and return access tokens', async () => {
       const res = await request(app.getHttpServer())
         .post(`/api/${version}/auth/login`)
         .send({
