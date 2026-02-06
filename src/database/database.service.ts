@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Pool, QueryResult, QueryResultRow } from 'pg';
-import { ConfigSchema } from 'src/config';
+import { CONSTANTS } from 'src/config';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit, OnModuleDestroy {
@@ -17,15 +17,12 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   private readonly dbPassword: string;
   private readonly dbName: string;
 
-  constructor(private readonly config: ConfigService<ConfigSchema>) {
-    const databaseConfig =
-      this.config.getOrThrow<ConfigSchema['database']>('database');
-
-    this.dbHost = databaseConfig.DB_HOST;
-    this.dbPort = databaseConfig.DB_PORT;
-    this.dbUser = databaseConfig.DB_USER;
-    this.dbPassword = databaseConfig.DB_PASSWORD;
-    this.dbName = databaseConfig.DB_NAME;
+  constructor(private readonly config: ConfigService) {
+    this.dbHost = config.getOrThrow(CONSTANTS.DATABASE.DB_HOST);
+    this.dbPort = config.getOrThrow(CONSTANTS.DATABASE.DB_PORT);
+    this.dbUser = config.getOrThrow(CONSTANTS.DATABASE.DB_USER);
+    this.dbPassword = config.getOrThrow(CONSTANTS.DATABASE.DB_PASSWORD);
+    this.dbName = config.getOrThrow(CONSTANTS.DATABASE.DB_NAME);
   }
 
   async onModuleInit() {

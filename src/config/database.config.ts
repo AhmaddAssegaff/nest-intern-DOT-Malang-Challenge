@@ -31,3 +31,19 @@ export const databaseConfig = registerAs<DatabaseConfigI>(
 );
 
 export default databaseConfig;
+
+type DatabaseKey = keyof DatabaseConfigI;
+
+export const CONSTANTS_DATABASE_KEYS: {
+  DATABASE: {
+    [K in DatabaseKey]: `${typeof DATABASE_CONFIG_NAME_KEY}.${K}`;
+  };
+} = {
+  DATABASE: {
+    DB_NAME: 'database.DB_NAME',
+    DB_USER: 'database.DB_USER',
+    DB_PASSWORD: 'database.DB_PASSWORD',
+    DB_HOST: 'database.DB_HOST',
+    DB_PORT: 'database.DB_PORT',
+  },
+} as const;
