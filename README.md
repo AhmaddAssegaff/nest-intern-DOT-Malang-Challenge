@@ -25,9 +25,11 @@ Sebagai contoh, pada modul auth, beberapa convesion tidak digunakan karena kuran
 
 ```ts
 postLogin(){}
+postReqister(){}
+postRefresh(){}
 
 ```
-dan method lain 
+sehingga di module auth saya tidak menerapkannya
 
 ## Project setup
 
