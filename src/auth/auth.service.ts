@@ -6,8 +6,7 @@ import {
 import { LoginRequestDto, ReqisterRequestDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { ConfigSchema } from 'src/config';
-import { JwtConfigI } from 'src/config/jwt.config';
+import { CONSTANTS } from 'src/config';
 import { AuthResponse, JwtPayload } from './jwt.interface';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
@@ -22,15 +21,21 @@ export class AuthService {
 
   constructor(
     private readonly jwtService: JwtService,
-    private readonly config: ConfigService<ConfigSchema>,
+    private readonly config: ConfigService,
     private readonly userService: UserService,
   ) {
-    const jwtConfig = this.config.getOrThrow<JwtConfigI>('jwt');
-
-    this.accessSecret = jwtConfig.AUTH_JWT_ACCESS_TOKEN_SECRET;
-    this.accessExpiresIn = jwtConfig.AUTH_JWT_ACCESS_TOKEN_EXPIRES_IN;
-    this.refreshSecret = jwtConfig.AUTH_JWT_REFRESH_TOKEN_SECRET;
-    this.refreshExpiresIn = jwtConfig.AUTH_JWT_REFRESH_TOKEN_EXPIRES_IN;
+    this.accessSecret = this.config.getOrThrow(
+      CONSTANTS.JWT.AUTH_JWT_ACCESS_TOKEN_SECRET,
+    );
+    this.accessExpiresIn = this.config.getOrThrow(
+      CONSTANTS.JWT.AUTH_JWT_ACCESS_TOKEN_EXPIRES_IN,
+    );
+    this.refreshSecret = this.config.getOrThrow(
+      CONSTANTS.JWT.AUTH_JWT_REFRESH_TOKEN_SECRET,
+    );
+    this.refreshExpiresIn = this.config.getOrThrow(
+      CONSTANTS.JWT.AUTH_JWT_REFRESH_TOKEN_EXPIRES_IN,
+    );
   }
 
   signAccessToken(payload: JwtPayload) {

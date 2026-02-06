@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import * as Joi from 'joi';
 
-export const APP_CONFIG_NAME_KEY = 'jwt';
+export const JWT_CONFIG_NAME_KEY = 'jwt' as const;
 
 export interface JwtConfigI {
   AUTH_JWT_ACCESS_TOKEN_SECRET: string;
@@ -17,7 +17,7 @@ export const jwtValidationSchema = {
   AUTH_JWT_REFRESH_TOKEN_EXPIRES_IN: Joi.string().required(),
 };
 
-export const jwtConfig = registerAs<JwtConfigI>(APP_CONFIG_NAME_KEY, () => ({
+export default registerAs<JwtConfigI>(JWT_CONFIG_NAME_KEY, () => ({
   AUTH_JWT_ACCESS_TOKEN_SECRET: process.env.AUTH_JWT_ACCESS_TOKEN_SECRET!,
   AUTH_JWT_ACCESS_TOKEN_EXPIRES_IN: Number(
     process.env.AUTH_JWT_ACCESS_TOKEN_EXPIRES_IN,
@@ -27,4 +27,18 @@ export const jwtConfig = registerAs<JwtConfigI>(APP_CONFIG_NAME_KEY, () => ({
     process.env.AUTH_JWT_REFRESH_TOKEN_EXPIRES_IN,
   ),
 }));
-export default jwtConfig;
+
+type JwtKey = keyof JwtConfigI;
+
+export const CONSTANTS_JWT_KEYS: {
+  JWT: {
+    [K in JwtKey]: `${typeof JWT_CONFIG_NAME_KEY}.${K}`;
+  };
+} = {
+  JWT: {
+    AUTH_JWT_ACCESS_TOKEN_EXPIRES_IN: 'jwt.AUTH_JWT_ACCESS_TOKEN_EXPIRES_IN',
+    AUTH_JWT_ACCESS_TOKEN_SECRET: 'jwt.AUTH_JWT_ACCESS_TOKEN_SECRET',
+    AUTH_JWT_REFRESH_TOKEN_EXPIRES_IN: 'jwt.AUTH_JWT_REFRESH_TOKEN_EXPIRES_IN',
+    AUTH_JWT_REFRESH_TOKEN_SECRET: 'jwt.AUTH_JWT_REFRESH_TOKEN_SECRET',
+  },
+} as const;

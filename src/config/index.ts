@@ -10,7 +10,7 @@ export const configs = [
   app.default,
   swg.swaggerConfig,
   db.default,
-  jwt.jwtConfig,
+  jwt.default,
 ] satisfies ConfigFactory[];
 
 export const validationSchema = Joi.object({
@@ -22,13 +22,12 @@ export const validationSchema = Joi.object({
 
 export interface ConfigSchema {
   [swg.SWAGGER_CONFIG_NAME_KEY]: swg.SwaggerConfigI;
-  [jwt.APP_CONFIG_NAME_KEY]: jwt.JwtConfigI;
 }
 
 export const CONSTANTS = {
   ...app.CONSTANTS_APP_KEYS,
   ...db.CONSTANTS_DATABASE_KEYS,
-  // ...jwt.CONSTANTS_JWT_KEYS,
+  ...jwt.CONSTANTS_JWT_KEYS,
 } as const;
 
 export default configs;
