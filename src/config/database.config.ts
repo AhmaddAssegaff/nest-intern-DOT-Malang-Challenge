@@ -19,18 +19,13 @@ export const databaseValidationSchema = {
   DB_PORT: Joi.number().port().required(),
 };
 
-export const databaseConfig = registerAs<DatabaseConfigI>(
-  DATABASE_CONFIG_NAME_KEY,
-  () => ({
-    DB_NAME: process.env.DB_NAME!,
-    DB_USER: process.env.DB_USER!,
-    DB_PASSWORD: process.env.DB_PASSWORD!,
-    DB_HOST: process.env.DB_HOST!,
-    DB_PORT: Number(process.env.DB_PORT),
-  }),
-);
-
-export default databaseConfig;
+export default registerAs(DATABASE_CONFIG_NAME_KEY, () => ({
+  DB_NAME: process.env.DB_NAME!,
+  DB_USER: process.env.DB_USER!,
+  DB_PASSWORD: process.env.DB_PASSWORD!,
+  DB_HOST: process.env.DB_HOST!,
+  DB_PORT: Number(process.env.DB_PORT),
+}));
 
 type DatabaseKey = keyof DatabaseConfigI;
 

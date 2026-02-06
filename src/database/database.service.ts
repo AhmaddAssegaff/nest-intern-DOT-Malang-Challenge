@@ -18,11 +18,11 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   private readonly dbName: string;
 
   constructor(private readonly config: ConfigService) {
-    this.dbHost = config.getOrThrow(CONSTANTS.DATABASE.DB_HOST);
-    this.dbPort = config.getOrThrow(CONSTANTS.DATABASE.DB_PORT);
-    this.dbUser = config.getOrThrow(CONSTANTS.DATABASE.DB_USER);
-    this.dbPassword = config.getOrThrow(CONSTANTS.DATABASE.DB_PASSWORD);
-    this.dbName = config.getOrThrow(CONSTANTS.DATABASE.DB_NAME);
+    this.dbHost = this.config.getOrThrow(CONSTANTS.DATABASE.DB_HOST);
+    this.dbPort = this.config.getOrThrow(CONSTANTS.DATABASE.DB_PORT);
+    this.dbUser = this.config.getOrThrow(CONSTANTS.DATABASE.DB_USER);
+    this.dbPassword = this.config.getOrThrow(CONSTANTS.DATABASE.DB_PASSWORD);
+    this.dbName = this.config.getOrThrow(CONSTANTS.DATABASE.DB_NAME);
   }
 
   async onModuleInit() {
