@@ -38,6 +38,10 @@ sehingga di module auth saya tidak menerapkannya
 $ pnpm install
 # migrations
 $ pnpm migrate:push
+# test e2e
+$ pnpm test:e2e auth / user / blog
+# test e2e unit test
+$ pnpm test
 # run project watch mode
 $ pnpm run start:dev
 ```
