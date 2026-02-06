@@ -26,9 +26,9 @@ import {
 @ApiBearerAuth('access-token')
 @Controller('blog')
 export class BlogController {
-  constructor(private readonly blogService: BlogService) {}
+  constructor(private readonly blogService: BlogService) { }
 
-  @Roles(userRole.user)
+  @Roles(userRole.USER)
   @UseGuards(JwtAccessGuard, RolesGuard)
   @Post()
   postBlog(
@@ -45,7 +45,7 @@ export class BlogController {
     return this.blogService.findBlogWithPagination(getBlogWithPagination);
   }
 
-  @Roles(userRole.user)
+  @Roles(userRole.USER)
   @UseGuards(JwtAccessGuard, RolesGuard)
   @Get('me')
   getManyBlogWithPaginationUser(
@@ -63,7 +63,7 @@ export class BlogController {
     return this.blogService.findOneBlogById(id);
   }
 
-  @Roles(userRole.user)
+  @Roles(userRole.USER)
   @UseGuards(JwtAccessGuard, RolesGuard)
   @Patch(':id')
   patchOneBlogById(
@@ -74,7 +74,7 @@ export class BlogController {
     return this.blogService.updateOneBlogById(updateBlogDto, userId, blogId);
   }
 
-  @Roles(userRole.admin)
+  @Roles(userRole.ADMIN)
   @UseGuards(JwtAccessGuard, RolesGuard)
   @Delete(':id')
   deleteOneBlogById(

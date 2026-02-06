@@ -6,7 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../../user/user.service';
 import { JwtPayload } from '../jwt.interface';
-import { userResponese, userRole } from '../../user/user.interface';
+import { UserResponese, userRole } from '../../user/user.interface';
 
 jest.mock('bcrypt', () => ({
   compare: jest.fn(),
@@ -32,11 +32,11 @@ describe('AuthService ', () => {
     getOrThrow: jest.fn().mockReturnValue(jwtConfigMock),
   };
 
-  const mockUserResponse: userResponese = {
+  const mockUserResponse: UserResponese = {
     id: '5612124b-7df9-47e5-8928-2fca779df0a0',
     username: 'username',
     password: 'hashedpassword',
-    role: userRole.user,
+    role: userRole.USER,
     created_at: new Date('2026-02-04T00:00:00Z'),
   };
 
@@ -135,7 +135,7 @@ describe('AuthService ', () => {
     it('should only call findUserById and return tokens', async () => {
       const dto: JwtPayload = {
         sub: 'd6db433b-7105-4a85-aa83-1bfb0b54df6e',
-        role: userRole.user,
+        role: userRole.USER,
         username: 'username',
         exp: 123,
         iat: 123,

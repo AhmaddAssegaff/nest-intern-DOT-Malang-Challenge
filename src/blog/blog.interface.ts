@@ -1,4 +1,4 @@
-export interface blogRespone {
+export interface BlogRespone {
   id: string;
   title: string;
   content: string;

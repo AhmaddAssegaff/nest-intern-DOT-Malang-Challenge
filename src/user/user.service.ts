@@ -1,25 +1,25 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { CreateUserDto } from './dto/createUser.dto';
-import { userResponese, userProfileResponese } from './user.interface';
+import { UserResponese, UserProfileResponese } from './user.interface';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository) { }
 
-  createUser(createUserDto: CreateUserDto): Promise<userResponese> {
+  createUser(createUserDto: CreateUserDto): Promise<UserResponese> {
     return this.userRepository.insertUser(createUserDto);
   }
 
-  findUserById(id: string): Promise<userResponese> {
+  findUserById(id: string): Promise<UserResponese> {
     return this.userRepository.selectOneUserById(id);
   }
 
-  findUserByUsername(username: string): Promise<userResponese> {
+  findUserByUsername(username: string): Promise<UserResponese> {
     return this.userRepository.selectOneUserByUsername(username);
   }
 
-  async findProfile(id: string): Promise<userProfileResponese> {
+  async findProfile(id: string): Promise<UserProfileResponese> {
     const user = await this.userRepository.selectOneUserById(id);
 
     if (!user) {

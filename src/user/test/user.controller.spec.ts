@@ -36,7 +36,7 @@ describe('UserController', () => {
       const payload: JwtPayload = {
         sub: '854fd4ca-03f7-4191-abeb-3690339f9290',
         username: 'username',
-        role: userRole.user,
+        role: userRole.USER,
         exp: 123,
         iat: 123,
       };

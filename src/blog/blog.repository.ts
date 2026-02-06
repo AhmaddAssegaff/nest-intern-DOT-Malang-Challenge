@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { QueryResult } from 'pg';
 import { DatabaseService } from '../database/database.service';
-import { blogRespone } from './blog.interface';
+import { BlogRespone } from './blog.interface';
 import {
   CreateBlogDto,
   GetBlogWithPaginationDto,
@@ -26,15 +26,15 @@ const SQL = {
 
 @Injectable()
 export class BlogRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(private readonly databaseService: DatabaseService) { }
 
   async insertBlog(
     createBlogDto: CreateBlogDto,
     userId: string,
-  ): Promise<blogRespone> {
+  ): Promise<BlogRespone> {
     const { title, content } = createBlogDto;
 
-    const result: QueryResult<blogRespone> = await this.databaseService.query(
+    const result: QueryResult<BlogRespone> = await this.databaseService.query(
       SQL.CREATE_BLOG,
       [title, content, userId],
     );
@@ -44,7 +44,7 @@ export class BlogRepository {
 
   async selectManyBlogWithPagination(
     getBlogWithPagination: GetBlogWithPaginationDto,
-  ): Promise<blogRespone[]> {
+  ): Promise<BlogRespone[]> {
     const { limit, page } = getBlogWithPagination;
 
     const defalutLimit = limit ?? 10;
@@ -52,7 +52,7 @@ export class BlogRepository {
 
     const offset = (defalutPage - 1) * defalutLimit;
 
-    const result: QueryResult<blogRespone> = await this.databaseService.query(
+    const result: QueryResult<BlogRespone> = await this.databaseService.query(
       SQL.SELECT_BLOG_PAGINATION,
       [defalutLimit, offset],
     );
@@ -63,7 +63,7 @@ export class BlogRepository {
   async selectManyBlogWithPaginationUser(
     getBlogWithPaginationUser: GetBlogWithPaginationUserDto,
     userId: string,
-  ): Promise<blogRespone[]> {
+  ): Promise<BlogRespone[]> {
     const { limit, page } = getBlogWithPaginationUser;
 
     const defalutLimit = limit ?? 10;
@@ -71,7 +71,7 @@ export class BlogRepository {
 
     const offset = (defalutPage - 1) * defalutLimit;
 
-    const result: QueryResult<blogRespone> = await this.databaseService.query(
+    const result: QueryResult<BlogRespone> = await this.databaseService.query(
       SQL.SELECT_BLOG_PAGINATION_USER,
       [defalutLimit, offset, userId],
     );
@@ -79,8 +79,8 @@ export class BlogRepository {
     return result.rows;
   }
 
-  async selectOneBlogById(id: string): Promise<blogRespone> {
-    const result: QueryResult<blogRespone> = await this.databaseService.query(
+  async selectOneBlogById(id: string): Promise<BlogRespone> {
+    const result: QueryResult<BlogRespone> = await this.databaseService.query(
       SQL.SELECT_BLOG_BY_ID,
       [id],
     );
@@ -92,10 +92,10 @@ export class BlogRepository {
     updateBlogDto: UpdateBlogDto,
     userId: string,
     blogId: string,
-  ): Promise<blogRespone> {
+  ): Promise<BlogRespone> {
     const { title, content } = updateBlogDto;
 
-    const result: QueryResult<blogRespone> = await this.databaseService.query(
+    const result: QueryResult<BlogRespone> = await this.databaseService.query(
       SQL.UPDATE_BLOG_BY_ID,
       [title, content, blogId, userId],
     );
@@ -106,8 +106,8 @@ export class BlogRepository {
   async deleteOneBlogById(
     blogId: string,
     userId: string,
-  ): Promise<blogRespone> {
-    const result: QueryResult<blogRespone> = await this.databaseService.query(
+  ): Promise<BlogRespone> {
+    const result: QueryResult<BlogRespone> = await this.databaseService.query(
       SQL.DELETE_BLOG_BY_ID,
       [blogId, userId],
     );

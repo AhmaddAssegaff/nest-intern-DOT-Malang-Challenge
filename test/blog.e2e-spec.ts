@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { AuthResponse } from 'src/auth/jwt.interface';
-import { blogRespone } from 'src/blog/blog.interface';
+import { BlogRespone } from 'src/blog/blog.interface';
 
 describe('Blog E2E', () => {
   let app: INestApplication;
@@ -63,7 +63,7 @@ describe('Blog E2E', () => {
           title: `title blog test e2e ${Date.now()}`,
           content: `content blog test e2e ${Date.now()}`,
         });
-      const body = res.body as blogRespone;
+      const body = res.body as BlogRespone;
 
       blogId = body.id;
 
