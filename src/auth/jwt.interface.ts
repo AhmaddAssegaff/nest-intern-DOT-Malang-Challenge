@@ -1,33 +1,43 @@
 import { userRole } from '../user/user.interface';
+import { Request } from 'express';
 
-export interface JwtPayload {
+/**
+ * Isi token JWT (signed)
+ */
+export interface JwtAuthPayload {
   sub: string;
-  username: string;
   role: userRole;
   iat?: number;
   exp?: number;
 }
 
-export interface AuthTokens {
+/**
+ * User context hasil authentication
+ * (request.user)
+ */
+export interface AuthenticatedUser {
+  sub: string;
+  role: userRole;
+}
+
+/**
+ * Pasangan token
+ */
+export interface AuthTokenPair {
   accessToken: string;
   refreshToken: string;
 }
 
-export interface AuthResponse {
-  payload: JwtPayload;
-  tokens: AuthTokens;
+/**
+ * Response auth ke client
+ */
+export interface AuthResponseDto {
+  tokens: AuthTokenPair;
 }
 
-export interface LoginRequestDto {
-  username: string;
-  password: string;
-}
-
-export interface ReqisterRequestDto {
-  username: string;
-  password: string;
-}
-
-export interface RequestWithUser extends Request {
-  user: JwtPayload;
+/**
+ * Request yang sudah terautentikasi
+ */
+export interface AuthenticatedRequest extends Request {
+  user: AuthenticatedUser;
 }

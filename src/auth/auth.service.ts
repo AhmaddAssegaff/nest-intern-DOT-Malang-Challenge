@@ -7,10 +7,9 @@ import { LoginRequestDto, ReqisterRequestDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { CONSTANTS } from 'src/config';
-import { AuthResponse, JwtPayload } from './jwt.interface';
+import { AuthResponseDto, JwtAuthPayload } from './jwt.interface';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
-import { userRole } from '../user/user.interface';
 
 @Injectable()
 export class AuthService {
@@ -38,126 +37,84 @@ export class AuthService {
     );
   }
 
-  signAccessToken(payload: JwtPayload) {
+  private signAccessToken(payload: JwtAuthPayload): string {
     return this.jwtService.sign(payload, {
       secret: this.accessSecret,
       expiresIn: this.accessExpiresIn,
     });
   }
 
-  signRefreshToken(payload: JwtPayload) {
+  private signRefreshToken(payload: JwtAuthPayload): string {
     return this.jwtService.sign(payload, {
       secret: this.refreshSecret,
       expiresIn: this.refreshExpiresIn,
     });
   }
 
-  verifyAccessToken(token: string): JwtPayload | null {
-    try {
-      return this.jwtService.verify<JwtPayload>(token, {
-        secret: this.accessSecret,
-      });
-    } catch {
-      return null;
-    }
-  }
-
-  verifyRefreshToken(token: string): JwtPayload | null {
-    try {
-      return this.jwtService.verify<JwtPayload>(token, {
-        secret: this.refreshSecret,
-      });
-    } catch {
-      return null;
-    }
-  }
-
-  async login(loginRequestDto: LoginRequestDto): Promise<AuthResponse> {
-    const { username, password } = loginRequestDto;
-
-    const user = await this.userService.findUserByUsername(username);
+  async login(dto: LoginRequestDto): Promise<AuthResponseDto> {
+    const user = await this.userService.findUserByUsername(dto.username);
     if (!user) {
       throw new UnauthorizedException('Username atau password salah');
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
+    const isValid = await bcrypt.compare(dto.password, user.password);
+    if (!isValid) {
       throw new UnauthorizedException('Username atau password salah');
     }
 
-    const payload: JwtPayload = {
+    const payload: JwtAuthPayload = {
       sub: user.id,
-      username: user.username,
-      role: userRole.USER,
+      role: user.role,
     };
 
-    const accessToken = this.signAccessToken(payload);
-    const refreshToken = this.signRefreshToken(payload);
-
     return {
-      payload: payload,
       tokens: {
-        accessToken,
-        refreshToken,
+        accessToken: this.signAccessToken(payload),
+        refreshToken: this.signRefreshToken(payload),
       },
     };
   }
 
-  async reqister(
-    reqisterRequestDto: ReqisterRequestDto,
-  ): Promise<AuthResponse> {
-    const { username, password } = reqisterRequestDto;
-
-    const existingUser = await this.userService.findUserByUsername(username);
-    if (existingUser) {
-      throw new ConflictException('Username sudah di pakai');
+  async register(dto: ReqisterRequestDto): Promise<AuthResponseDto> {
+    const exists = await this.userService.findUserByUsername(dto.username);
+    if (exists) {
+      throw new ConflictException('Username sudah dipakai');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await this.userService.createUser({
-      username,
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+    const user = await this.userService.createUser({
+      username: dto.username,
       password: hashedPassword,
     });
 
-    const payload: JwtPayload = {
-      sub: newUser.id,
-      username: newUser.username,
-      role: userRole.USER,
+    const payload: JwtAuthPayload = {
+      sub: user.id,
+      role: user.role,
     };
 
-    const accessToken = this.signAccessToken(payload);
-    const refreshToken = this.signRefreshToken(payload);
-
     return {
-      payload: payload,
       tokens: {
-        accessToken,
-        refreshToken,
+        accessToken: this.signAccessToken(payload),
+        refreshToken: this.signRefreshToken(payload),
       },
     };
   }
 
-  async refreshToken(payload: JwtPayload): Promise<AuthResponse> {
+  async refreshToken(payload: JwtAuthPayload): Promise<AuthResponseDto> {
     const user = await this.userService.findUserById(payload.sub);
     if (!user) {
       throw new UnauthorizedException();
     }
 
-    const newPayload: JwtPayload = {
+    const newPayload: JwtAuthPayload = {
       sub: user.id,
-      username: user.username,
       role: user.role,
     };
 
-    const accessToken = this.signAccessToken(newPayload);
-    const refreshToken = this.signRefreshToken(newPayload);
-
     return {
-      payload: newPayload,
       tokens: {
-        accessToken,
-        refreshToken,
+        accessToken: this.signAccessToken(newPayload),
+        refreshToken: this.signRefreshToken(newPayload),
       },
     };
   }

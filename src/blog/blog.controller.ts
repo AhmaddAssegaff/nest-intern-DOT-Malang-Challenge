@@ -22,20 +22,21 @@ import {
   GetBlogWithPaginationUserDto,
   UpdateBlogDto,
 } from './dto/blog.dto';
+import { type AuthenticatedUser } from 'src/auth/jwt.interface';
 
 @ApiBearerAuth('access-token')
 @Controller('blog')
 export class BlogController {
-  constructor(private readonly blogService: BlogService) { }
+  constructor(private readonly blogService: BlogService) {}
 
   @Roles(userRole.USER)
   @UseGuards(JwtAccessGuard, RolesGuard)
   @Post()
   postBlog(
-    @CurrentUser('sub') userId: string,
+    @CurrentUser() user: AuthenticatedUser,
     @Body() createBlogDto: CreateBlogDto,
   ) {
-    return this.blogService.createBlog(createBlogDto, userId);
+    return this.blogService.createBlog(createBlogDto, user.sub);
   }
 
   @Get()
@@ -49,12 +50,12 @@ export class BlogController {
   @UseGuards(JwtAccessGuard, RolesGuard)
   @Get('me')
   getManyBlogWithPaginationUser(
-    @CurrentUser('sub') userId: string,
+    @CurrentUser() user: AuthenticatedUser,
     @Query() getBlogWithPaginationUser: GetBlogWithPaginationUserDto,
   ) {
     return this.blogService.findBlogWithPaginationUser(
       getBlogWithPaginationUser,
-      userId,
+      user.sub,
     );
   }
 
@@ -67,20 +68,20 @@ export class BlogController {
   @UseGuards(JwtAccessGuard, RolesGuard)
   @Patch(':id')
   patchOneBlogById(
-    @CurrentUser('sub') userId: string,
+    @CurrentUser() user: AuthenticatedUser,
     @Param('id') blogId: string,
     @Body() updateBlogDto: UpdateBlogDto,
   ) {
-    return this.blogService.updateOneBlogById(updateBlogDto, userId, blogId);
+    return this.blogService.updateOneBlogById(updateBlogDto, user.sub, blogId);
   }
 
   @Roles(userRole.ADMIN)
   @UseGuards(JwtAccessGuard, RolesGuard)
   @Delete(':id')
   deleteOneBlogById(
-    @CurrentUser('sub') userId: string,
+    @CurrentUser() user: AuthenticatedUser,
     @Param('id') blogId: string,
   ) {
-    return this.blogService.removeOneBlogById(blogId, userId);
+    return this.blogService.removeOneBlogById(blogId, user.sub);
   }
 }
