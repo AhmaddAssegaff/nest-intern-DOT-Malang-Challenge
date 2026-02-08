@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from '../auth.controller';
 import { AuthService } from '../auth.service';
 import { LoginRequestDto, ReqisterRequestDto } from '../dto/auth.dto';
-import { JwtPayload } from '../jwt.interface';
+import { JwtAuthPayload } from '../jwt.interface';
 import { userRole } from '../../user/user.interface';
 
 describe('AuthController', () => {
@@ -10,7 +10,7 @@ describe('AuthController', () => {
 
   const authServiceMock = {
     login: jest.fn().mockResolvedValue({}),
-    reqister: jest.fn().mockResolvedValue({}),
+    register: jest.fn().mockResolvedValue({}),
     refreshToken: jest.fn().mockResolvedValue({}),
   };
 
@@ -43,21 +43,21 @@ describe('AuthController', () => {
       expect(authServiceMock.login).toHaveBeenCalledWith(dto);
 
       expect(authServiceMock.refreshToken).not.toHaveBeenCalled();
-      expect(authServiceMock.reqister).not.toHaveBeenCalled();
+      expect(authServiceMock.register).not.toHaveBeenCalled();
     });
   });
 
-  describe('reqister', () => {
+  describe('register', () => {
     it('should be only call reqister', async () => {
       const dto: ReqisterRequestDto = {
         username: 'username',
         password: 'password',
       };
 
-      await controller.reqister(dto);
+      await controller.register(dto);
 
-      expect(authServiceMock.reqister).toHaveBeenCalledTimes(1);
-      expect(authServiceMock.reqister).toHaveBeenCalledWith(dto);
+      expect(authServiceMock.register).toHaveBeenCalledTimes(1);
+      expect(authServiceMock.register).toHaveBeenCalledWith(dto);
 
       expect(authServiceMock.refreshToken).not.toHaveBeenCalled();
       expect(authServiceMock.login).not.toHaveBeenCalled();
@@ -66,9 +66,8 @@ describe('AuthController', () => {
 
   describe('refreshToken', () => {
     it('should be only call refreshToken', async () => {
-      const user: JwtPayload = {
+      const user: JwtAuthPayload = {
         sub: '8d176169-2b31-44a0-b10a-665071e59fe3',
-        username: 'username',
         role: userRole.USER,
         exp: 123,
         iat: 123,
@@ -79,7 +78,7 @@ describe('AuthController', () => {
       expect(authServiceMock.refreshToken).toHaveBeenCalledWith(user);
 
       expect(authServiceMock.login).not.toHaveBeenCalled();
-      expect(authServiceMock.reqister).not.toHaveBeenCalled();
+      expect(authServiceMock.register).not.toHaveBeenCalled();
     });
   });
 });

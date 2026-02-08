@@ -17,7 +17,7 @@ export class AuthController {
   }
 
   @Post('/reqister')
-  reqister(@Body() reqisterRequestDto: ReqisterRequestDto) {
+  register(@Body() reqisterRequestDto: ReqisterRequestDto) {
     return this.authService.register(reqisterRequestDto);
   }
 
