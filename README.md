@@ -35,16 +35,18 @@ sehingga di module auth saya tidak menerapkannya
 
 ```bash
 # clone this repo
-$ https://github.com/AhmaddAssegaff/nest-intern-DOT-Malang-Challenge.git
+$ git clone https://github.com/AhmaddAssegaff/nest-intern-DOT-Malang-Challenge.git
 # install pakage
 $ pnpm install
 # create db and pgadmin container
 $ docker compose up -d
-# migrations
-$ pnpm migrate:push
-# test e2e
-$ pnpm test:e2e auth / user / blog
-# test e2e unit test
+# migrations all table + init.sql
+$ pnpm run migrate:up
+# Seed database
+$ pnpm run migrate:seed
+# e2e test 
+$ pnpm test:e2e
+# unit test
 $ pnpm test
 # run project watch mode
 $ pnpm run start:dev
@@ -81,15 +83,20 @@ $ pnpm run test:cov
 ## Run migrations
 
 ```bash
-# Jalankan semua migration
-$ pnpm run migrate:push
-
-# Jalankan semua migration di linux
-$ sudo pnpm run migrate:push
-
+# Jalankan semua migration up (init + tables)
+$ pnpm run migrate:up
+# Rollback semua migration
+$ pnpm run migrate:down
+# Jalankan semua seed database
+$ pnpm run migrate:seed
+# Jalankan satu migration (up)
+$ pnpm run migrate:up:one -- users
+# Rollback satu migration (down)
+$ pnpm run migrate:down:one -- users
 # Membuat file migration baru
 $ pnpm run migrate:create
 ```
+- **semua seed file di buat manual**
 
 ## License
 
