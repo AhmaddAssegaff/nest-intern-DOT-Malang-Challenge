@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from '../user.controller';
 import { UserService } from '../user.service';
-import { JwtPayload } from 'src/auth/jwt.interface';
+import { JwtAuthPayload } from 'src/auth/jwt.interface';
 import { userRole } from '../user.interface';
 
 describe('UserController', () => {
@@ -33,9 +33,8 @@ describe('UserController', () => {
 
   describe('getProfile', () => {
     it('should be only call findProfile', async () => {
-      const payload: JwtPayload = {
+      const payload: JwtAuthPayload = {
         sub: '854fd4ca-03f7-4191-abeb-3690339f9290',
-        username: 'username',
         role: userRole.USER,
         exp: 123,
         iat: 123,

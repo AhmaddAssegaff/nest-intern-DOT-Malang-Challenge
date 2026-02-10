@@ -7,6 +7,8 @@ import {
   GetBlogWithPaginationUserDto,
   UpdateBlogDto,
 } from '../dto/blog.dto';
+import { AuthenticatedUser } from 'src/auth/jwt.interface';
+import { userRole } from 'src/user/user.interface';
 
 describe('BlogController', () => {
   let controller: BlogController;
@@ -40,13 +42,16 @@ describe('BlogController', () => {
   describe('postBlog', () => {
     it('should only call createBlog', async () => {
       const dto: CreateBlogDto = { content: 'content', title: 'title' };
-      const userId = '95d7a924-5681-41b7-a853-f32f8922e366';
+      const user: AuthenticatedUser = {
+        sub: '7c966b34-7504-457a-a547-7bdd9f316e94',
+        role: userRole.USER,
+      };
 
-      await controller.postBlog(userId, dto);
+      await controller.postBlog(user, dto);
 
       expect(blogServiceMock.createBlog).toHaveBeenCalled();
       expect(blogServiceMock.createBlog).toHaveBeenCalledTimes(1);
-      expect(blogServiceMock.createBlog).toHaveBeenCalledWith(dto, userId);
+      expect(blogServiceMock.createBlog).toHaveBeenCalledWith(dto, user.sub);
 
       expect(blogServiceMock.findBlogWithPagination).not.toHaveBeenCalled();
       expect(blogServiceMock.findOneBlogById).not.toHaveBeenCalled();
@@ -82,9 +87,12 @@ describe('BlogController', () => {
         page: 1,
         limit: 10,
       };
-      const userId = 'a2d47199-6b92-4ae0-81e4-3541ff835faa';
+      const user: AuthenticatedUser = {
+        sub: '90706e2d-1b5f-45eb-9703-7a908c159241',
+        role: userRole.USER,
+      };
 
-      await controller.getManyBlogWithPaginationUser(userId, dto);
+      await controller.getManyBlogWithPaginationUser(user, dto);
 
       expect(blogServiceMock.findBlogWithPaginationUser).toHaveBeenCalled();
       expect(blogServiceMock.findBlogWithPaginationUser).toHaveBeenCalledTimes(
@@ -92,7 +100,7 @@ describe('BlogController', () => {
       );
       expect(blogServiceMock.findBlogWithPaginationUser).toHaveBeenCalledWith(
         dto,
-        userId,
+        user.sub,
       );
 
       expect(blogServiceMock.createBlog).not.toHaveBeenCalled();
@@ -128,16 +136,19 @@ describe('BlogController', () => {
         title: 'title',
       };
 
-      const userId = 'c709af5b-0b7d-4393-ade8-0e8963c9cd70';
+      const user: AuthenticatedUser = {
+        sub: 'c4d1e41b-a151-4ccf-bf94-bb1f7a5bf45c',
+        role: userRole.USER,
+      };
       const blogId = '7a804bd2-3104-4173-90dc-57697d9f1809';
 
-      await controller.patchOneBlogById(userId, blogId, dto);
+      await controller.patchOneBlogById(user, blogId, dto);
 
       expect(blogServiceMock.updateOneBlogById).toHaveBeenCalled();
       expect(blogServiceMock.updateOneBlogById).toHaveBeenCalledTimes(1);
       expect(blogServiceMock.updateOneBlogById).toHaveBeenCalledWith(
         dto,
-        userId,
+        user.sub,
         blogId,
       );
 
@@ -151,16 +162,19 @@ describe('BlogController', () => {
 
   describe('deleteOneBlogById', () => {
     it('should be only call removeOneBlogById ', async () => {
-      const userId = '3c5be174-236a-455b-ae13-8f3696af51bd';
-      const blogId = '64bad37f-4ef0-4088-890d-ef66b8ba042a';
+      const blogId = '3c5be174-236a-455b-ae13-8f3696af51bd';
+      const user: AuthenticatedUser = {
+        sub: 'bcc01dec-4bf0-4b06-82ff-4ac085551b1b',
+        role: userRole.ADMIN,
+      };
 
-      await controller.deleteOneBlogById(userId, blogId);
+      await controller.deleteOneBlogById(user, blogId);
 
       expect(blogServiceMock.removeOneBlogById).toHaveBeenCalled();
       expect(blogServiceMock.removeOneBlogById).toHaveBeenCalledTimes(1);
       expect(blogServiceMock.removeOneBlogById).toHaveBeenCalledWith(
         blogId,
-        userId,
+        user.sub,
       );
 
       expect(blogServiceMock.createBlog).not.toHaveBeenCalled();
