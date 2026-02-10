@@ -23,6 +23,7 @@ import {
   UpdateBlogDto,
 } from './dto/blog.dto';
 import { type AuthenticatedUser } from 'src/auth/jwt.interface';
+import { BlogRespone } from './blog.interface';
 
 @ApiBearerAuth('access-token')
 @Controller('blog')
@@ -35,14 +36,14 @@ export class BlogController {
   postBlog(
     @CurrentUser() user: AuthenticatedUser,
     @Body() createBlogDto: CreateBlogDto,
-  ) {
+  ): Promise<BlogRespone> {
     return this.blogService.createBlog(createBlogDto, user.sub);
   }
 
   @Get()
   getManyBlogWithPagination(
     @Query() getBlogWithPagination: GetBlogWithPaginationDto,
-  ) {
+  ): Promise<BlogRespone[]> {
     return this.blogService.findBlogWithPagination(getBlogWithPagination);
   }
 
@@ -52,7 +53,7 @@ export class BlogController {
   getManyBlogWithPaginationUser(
     @CurrentUser() user: AuthenticatedUser,
     @Query() getBlogWithPaginationUser: GetBlogWithPaginationUserDto,
-  ) {
+  ): Promise<BlogRespone[]> {
     return this.blogService.findBlogWithPaginationUser(
       getBlogWithPaginationUser,
       user.sub,
@@ -60,7 +61,7 @@ export class BlogController {
   }
 
   @Get(':id')
-  getOneBlogById(@Param('id') id: string) {
+  getOneBlogById(@Param('id') id: string): Promise<BlogRespone> {
     return this.blogService.findOneBlogById(id);
   }
 
@@ -71,7 +72,7 @@ export class BlogController {
     @CurrentUser() user: AuthenticatedUser,
     @Param('id') blogId: string,
     @Body() updateBlogDto: UpdateBlogDto,
-  ) {
+  ): Promise<BlogRespone> {
     return this.blogService.updateOneBlogById(updateBlogDto, user.sub, blogId);
   }
 
@@ -81,7 +82,7 @@ export class BlogController {
   deleteOneBlogById(
     @CurrentUser() user: AuthenticatedUser,
     @Param('id') blogId: string,
-  ) {
+  ): Promise<BlogRespone> {
     return this.blogService.removeOneBlogById(blogId, user.sub);
   }
 }

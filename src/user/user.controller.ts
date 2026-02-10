@@ -4,6 +4,7 @@ import { CurrentUser } from '../auth/decorator/current-user.decorator';
 import { JwtAccessGuard } from '../auth/guard/jwt-access.guard';
 import { type AuthenticatedUser } from '../auth/jwt.interface';
 import { UserService } from './user.service';
+import { UserProfileResponese } from './user.interface';
 
 @ApiBearerAuth('access-token')
 @UseGuards(JwtAccessGuard)
@@ -12,7 +13,9 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('me')
-  getProfile(@CurrentUser() user: AuthenticatedUser) {
+  getProfile(
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<UserProfileResponese> {
     return this.userService.findProfile(user.sub);
   }
 }

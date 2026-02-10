@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { LoginRequestDto, ReqisterRequestDto } from './dto/auth.dto';
 import { JwtRefreshGuard } from './guard/jwt-refresh.guard';
 import { CurrentUser } from './decorator/current-user.decorator';
-import { type JwtAuthPayload } from './jwt.interface';
+import { AuthResponseDto, type JwtAuthPayload } from './jwt.interface';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
@@ -12,12 +12,14 @@ export class AuthController {
 
   @Post('/login')
   @HttpCode(200)
-  login(@Body() loginRequestDto: LoginRequestDto) {
+  login(@Body() loginRequestDto: LoginRequestDto): Promise<AuthResponseDto> {
     return this.authService.login(loginRequestDto);
   }
 
   @Post('/reqister')
-  register(@Body() reqisterRequestDto: ReqisterRequestDto) {
+  register(
+    @Body() reqisterRequestDto: ReqisterRequestDto,
+  ): Promise<AuthResponseDto> {
     return this.authService.register(reqisterRequestDto);
   }
 
@@ -25,7 +27,7 @@ export class AuthController {
   @ApiBearerAuth('refresh-token')
   @Post('/refresh')
   @UseGuards(JwtRefreshGuard)
-  refreshToken(@CurrentUser() user: JwtAuthPayload) {
+  refreshToken(@CurrentUser() user: JwtAuthPayload): Promise<AuthResponseDto> {
     return this.authService.refreshToken(user);
   }
 }
