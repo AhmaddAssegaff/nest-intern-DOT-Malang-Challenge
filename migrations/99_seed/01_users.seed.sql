@@ -1,3 +1,7 @@
+-- Seed default USER for E2E test
+-- username: user test
+-- password: password
+
 INSERT INTO users (id, username, password, role)
 VALUES
 (
