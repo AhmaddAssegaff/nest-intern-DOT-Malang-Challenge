@@ -39,6 +39,7 @@ export class AuthService {
 
   private signAccessToken(payload: JwtAuthPayload): string {
     return this.jwtService.sign(payload, {
+      algorithm: 'HS256',
       secret: this.accessSecret,
       expiresIn: this.accessExpiresIn,
     });
@@ -46,6 +47,7 @@ export class AuthService {
 
   private signRefreshToken(payload: JwtAuthPayload): string {
     return this.jwtService.sign(payload, {
+      algorithm: 'HS256',
       secret: this.refreshSecret,
       expiresIn: this.refreshExpiresIn,
     });
