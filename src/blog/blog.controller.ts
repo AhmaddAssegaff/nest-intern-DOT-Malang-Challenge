@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { Roles } from '../auth/decorator/roles.decorator';
@@ -61,7 +62,7 @@ export class BlogController {
   }
 
   @Get(':id')
-  getOneBlogById(@Param('id') id: string): Promise<BlogRespone> {
+  getOneBlogById(@Param('id', ParseUUIDPipe) id: string): Promise<BlogRespone> {
     return this.blogService.findOneBlogById(id);
   }
 
@@ -70,7 +71,7 @@ export class BlogController {
   @Patch(':id')
   patchOneBlogById(
     @CurrentUser() user: AuthenticatedUser,
-    @Param('id') blogId: string,
+    @Param('id', ParseUUIDPipe) blogId: string,
     @Body() updateBlogDto: UpdateBlogDto,
   ): Promise<BlogRespone> {
     return this.blogService.updateOneBlogById(updateBlogDto, user.sub, blogId);
@@ -81,7 +82,7 @@ export class BlogController {
   @Delete(':id')
   deleteOneBlogById(
     @CurrentUser() user: AuthenticatedUser,
-    @Param('id') blogId: string,
+    @Param('id', ParseUUIDPipe) blogId: string,
   ): Promise<BlogRespone> {
     return this.blogService.removeOneBlogById(blogId, user.sub);
   }
