@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { QueryResult } from 'pg';
 import { DatabaseService } from '../database/database.service';
 import { BlogRespone } from './blog.interface';
@@ -26,7 +26,7 @@ const SQL = {
 
 @Injectable()
 export class BlogRepository {
-  constructor(private readonly databaseService: DatabaseService) { }
+  constructor(private readonly databaseService: DatabaseService) {}
 
   async insertBlog(
     createBlogDto: CreateBlogDto,
@@ -57,6 +57,10 @@ export class BlogRepository {
       [defalutLimit, offset],
     );
 
+    if (result.rows.length === 0) {
+      throw new NotFoundException('blog tidak di temukan');
+    }
+
     return result.rows;
   }
 
@@ -76,6 +80,10 @@ export class BlogRepository {
       [defalutLimit, offset, userId],
     );
 
+    if (result.rows.length === 0) {
+      throw new NotFoundException('blog tidak di temukan');
+    }
+
     return result.rows;
   }
 
@@ -84,6 +92,10 @@ export class BlogRepository {
       SQL.SELECT_BLOG_BY_ID,
       [id],
     );
+
+    if (result.rows.length === 0) {
+      throw new NotFoundException('blog tidak di temukan');
+    }
 
     return result.rows[0];
   }
@@ -100,6 +112,10 @@ export class BlogRepository {
       [title, content, blogId, userId],
     );
 
+    if (result.rows.length === 0) {
+      throw new NotFoundException('blog tidak di temukan');
+    }
+
     return result.rows[0];
   }
 
@@ -111,6 +127,10 @@ export class BlogRepository {
       SQL.DELETE_BLOG_BY_ID,
       [blogId, userId],
     );
+
+    if (result.rows.length === 0) {
+      throw new NotFoundException('blog tidak di temukan');
+    }
 
     return result.rows[0];
   }
