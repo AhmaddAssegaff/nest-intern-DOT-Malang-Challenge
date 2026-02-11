@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { AuthResponse } from 'src/auth/jwt.interface';
+import { AuthResponseDto } from 'src/auth/jwt.interface';
 
 describe('User E2E', () => {
   let app: INestApplication;
@@ -34,7 +34,7 @@ describe('User E2E', () => {
           password: 'password',
         });
 
-      const body = res.body as AuthResponse;
+      const body = res.body as AuthResponseDto;
 
       expect(res.status).toBe(200);
       expect(res.body).toBeDefined();
