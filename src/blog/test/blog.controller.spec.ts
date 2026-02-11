@@ -162,20 +162,16 @@ describe('BlogController', () => {
 
   describe('deleteOneBlogById', () => {
     it('should be only call removeOneBlogById ', async () => {
-      const blogId = '3c5be174-236a-455b-ae13-8f3696af51bd';
       const user: AuthenticatedUser = {
         sub: 'bcc01dec-4bf0-4b06-82ff-4ac085551b1b',
         role: userRole.ADMIN,
       };
 
-      await controller.deleteOneBlogById(user, blogId);
+      await controller.deleteOneBlogById(user.sub);
 
       expect(blogServiceMock.removeOneBlogById).toHaveBeenCalled();
       expect(blogServiceMock.removeOneBlogById).toHaveBeenCalledTimes(1);
-      expect(blogServiceMock.removeOneBlogById).toHaveBeenCalledWith(
-        blogId,
-        user.sub,
-      );
+      expect(blogServiceMock.removeOneBlogById).toHaveBeenCalledWith(user.sub);
 
       expect(blogServiceMock.createBlog).not.toHaveBeenCalled();
       expect(blogServiceMock.findBlogWithPaginationUser).not.toHaveBeenCalled();

@@ -151,15 +151,11 @@ describe('BlogService', () => {
 
   describe('removeOneBlogById', () => {
     it('should only call deleteOneBlogById', async () => {
-      const blogId = 'blog-uuid';
-      const userId = 'user-uuid';
+      const userId = 'ec6f538f-7eb6-4aa5-b24b-09372f567267';
 
-      await service.removeOneBlogById(blogId, userId);
+      await service.removeOneBlogById(userId);
 
-      expect(blogRepositoryMock.deleteOneBlogById).toHaveBeenCalledWith(
-        blogId,
-        userId,
-      );
+      expect(blogRepositoryMock.deleteOneBlogById).toHaveBeenCalledWith(userId);
       expect(blogRepositoryMock.deleteOneBlogById).toHaveBeenCalledTimes(1);
 
       expect(blogRepositoryMock.insertBlog).not.toHaveBeenCalled();

@@ -21,7 +21,7 @@ const SQL = {
   UPDATE_BLOG_BY_ID:
     'UPDATE "blog" SET title = $1, content = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 AND author_id = $4 RETURNING *',
   DELETE_BLOG_BY_ID:
-    'UPDATE "blog" SET is_deleted = TRUE, updated_at = CURRENT_TIMESTAMP WHERE id = $1 AND author_id = $2 RETURNING *',
+    'UPDATE "blog" SET is_deleted = TRUE, updated_at = CURRENT_TIMESTAMP WHERE id = $1 AND is_deleted = FALSE RETURNING *',
 };
 
 @Injectable()
@@ -119,13 +119,10 @@ export class BlogRepository {
     return result.rows[0];
   }
 
-  async deleteOneBlogById(
-    blogId: string,
-    userId: string,
-  ): Promise<BlogRespone> {
+  async deleteOneBlogById(blogId: string): Promise<BlogRespone> {
     const result: QueryResult<BlogRespone> = await this.databaseService.query(
       SQL.DELETE_BLOG_BY_ID,
-      [blogId, userId],
+      [blogId],
     );
 
     if (result.rows.length === 0) {

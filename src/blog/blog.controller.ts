@@ -81,9 +81,8 @@ export class BlogController {
   @UseGuards(JwtAccessGuard, RolesGuard)
   @Delete(':id')
   deleteOneBlogById(
-    @CurrentUser() user: AuthenticatedUser,
     @Param('id', ParseUUIDPipe) blogId: string,
   ): Promise<BlogRespone> {
-    return this.blogService.removeOneBlogById(blogId, user.sub);
+    return this.blogService.removeOneBlogById(blogId);
   }
 }

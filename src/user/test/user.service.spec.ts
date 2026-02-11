@@ -36,6 +36,8 @@ describe('UserService', () => {
 
       expect(UserRepositorMock.insertUser).toHaveBeenCalledTimes(1);
       expect(UserRepositorMock.insertUser).toHaveBeenCalledWith(dto);
+
+      expect(UserRepositorMock.selectOneUserByUsername).not.toHaveBeenCalled();
       expect(UserRepositorMock.selectOneUserById).not.toHaveBeenCalled();
     });
   });

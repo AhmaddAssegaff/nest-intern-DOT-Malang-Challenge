@@ -10,7 +10,7 @@ import { BlogRespone } from './blog.interface';
 
 @Injectable()
 export class BlogService {
-  constructor(private readonly blogRepository: BlogRepository) { }
+  constructor(private readonly blogRepository: BlogRepository) {}
 
   createBlog(
     createBlogDto: CreateBlogDto,
@@ -49,7 +49,7 @@ export class BlogService {
     return this.blogRepository.setBlogById(updateBlogDto, userId, blogId);
   }
 
-  removeOneBlogById(blogId: string, userId: string): Promise<BlogRespone> {
-    return this.blogRepository.deleteOneBlogById(blogId, userId);
+  removeOneBlogById(blogId: string): Promise<BlogRespone> {
+    return this.blogRepository.deleteOneBlogById(blogId);
   }
 }
