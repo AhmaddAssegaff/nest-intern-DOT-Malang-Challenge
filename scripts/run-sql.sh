@@ -1,11 +1,11 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-  echo "Usage: ./scripts/run-sql.sh <relative-sql-path-in-migrations> [env-file]"
+  echo "Usage: ./scripts/run-sql.sh <sql-file-path> [env-file]"
   exit 1
 fi
 
-SQL_FILE="./migrations/$1"
+SQL_FILE="$1"
 ENV_FILE=${2:-".env"}
 
 if [ ! -f "$SQL_FILE" ]; then
@@ -18,6 +18,6 @@ if [ ! -f "$ENV_FILE" ]; then
   exit 1
 fi
 
-echo "Running migration with env: $ENV_FILE"
+echo "Running SQL file: $SQL_FILE with env: $ENV_FILE"
 
 dotenv -e "$ENV_FILE" -- bash -c "docker exec -i postgres_intern_dot_malang psql -U \$DB_USER -d \$DB_NAME -f - < \"$SQL_FILE\""

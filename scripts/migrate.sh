@@ -38,7 +38,12 @@ if [[ "$ACTION" == "down" && "$TARGET" == "all" ]]; then
 fi
 
 run_sql() {
-  bash ./scripts/run-sql.sh "$1" "$ENV_FILE"
+  local file="$1"
+  if [[ "$ACTION" == "seed" ]]; then
+    bash ./scripts/run-sql.sh "$file" "$ENV_FILE"
+  else
+    bash ./scripts/run-sql.sh "migrations/$file" "$ENV_FILE"
+  fi
 }
 
 find_migrations() {
@@ -103,12 +108,12 @@ fi
 if [ "$ACTION" = "seed" ]; then
   echo "🌱 Running SEED"
 
-  if [ ! -d "migrations/99_seed" ]; then
+  if [ ! -d "seed" ]; then
     echo "⚠️  No seed directory found"
     exit 0
   fi
 
-  find migrations/99_seed -name '*.sql' | sort | while read -r file; do
-    run_sql "${file#migrations/}"
+  find seed -name '*.sql' | sort | while read -r file; do
+    run_sql "$file"
   done
 fi
