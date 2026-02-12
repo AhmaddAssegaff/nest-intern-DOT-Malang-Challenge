@@ -10,17 +10,19 @@ async function bootstrap() {
 
   const config = app.get(ConfigService);
 
-  const appMode = config.getOrThrow<string>(CONSTANTS.APP.mode);
+  const appMode = config.getOrThrow<string>(CONSTANTS.APP.NODE_ENV);
 
-  const port = config.getOrThrow<string>(CONSTANTS.APP.port);
+  const port = config.getOrThrow<string>(CONSTANTS.APP.APP_PORT);
 
   const defaultVersion = config.getOrThrow<string>(
-    CONSTANTS.APP.defaultVersion,
+    CONSTANTS.APP.DEFAULT_VERSION,
   );
-  const enableVersion = config.getOrThrow<string>(CONSTANTS.APP.enableVersion);
+  const enableVersion = config.getOrThrow<string>(CONSTANTS.APP.ENABLE_VERSION);
 
-  const globalPrefix = config.getOrThrow<string>(CONSTANTS.APP.globalPrefix);
-  const versionPrefix = config.getOrThrow<string>(CONSTANTS.APP.versionPrefix);
+  const globalPrefix = config.getOrThrow<string>(
+    CONSTANTS.APP.API_GLOBAL_PREFIX,
+  );
+  const versionPrefix = config.getOrThrow<string>(CONSTANTS.APP.VERSION_PREFIX);
 
   app.setGlobalPrefix(globalPrefix);
 
