@@ -4,11 +4,11 @@ import * as Joi from 'joi';
 export const CONFIG_NAME = 'database' as const;
 
 export const databaseConfig = registerAs(CONFIG_NAME, () => ({
-  DB_NAME: process.env.DB_NAME!,
-  DB_USER: process.env.DB_USER!,
-  DB_PASSWORD: process.env.DB_PASSWORD!,
-  DB_HOST: process.env.DB_HOST!,
-  DB_PORT: Number(process.env.DB_PORT),
+  DB_NAME: process.env.DB_NAME,
+  DB_USER: process.env.DB_USER,
+  DB_PASSWORD: process.env.DB_PASSWORD,
+  DB_HOST: process.env.DB_HOST,
+  DB_PORT: process.env.DB_PORT,
 }));
 
 type DatabaseConfig = ReturnType<typeof databaseConfig>;

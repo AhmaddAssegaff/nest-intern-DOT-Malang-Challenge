@@ -4,14 +4,12 @@ import * as Joi from 'joi';
 export const CONFIG_NAME = 'jwt' as const;
 
 export const jwtConfig = registerAs(CONFIG_NAME, () => ({
-  AUTH_JWT_ACCESS_TOKEN_SECRET: process.env.AUTH_JWT_ACCESS_TOKEN_SECRET!,
-  AUTH_JWT_ACCESS_TOKEN_EXPIRES_IN: Number(
+  AUTH_JWT_ACCESS_TOKEN_SECRET: process.env.AUTH_JWT_ACCESS_TOKEN_SECRET,
+  AUTH_JWT_ACCESS_TOKEN_EXPIRES_IN:
     process.env.AUTH_JWT_ACCESS_TOKEN_EXPIRES_IN,
-  ),
-  AUTH_JWT_REFRESH_TOKEN_SECRET: process.env.AUTH_JWT_REFRESH_TOKEN_SECRET!,
-  AUTH_JWT_REFRESH_TOKEN_EXPIRES_IN: Number(
+  AUTH_JWT_REFRESH_TOKEN_SECRET: process.env.AUTH_JWT_REFRESH_TOKEN_SECRET,
+  AUTH_JWT_REFRESH_TOKEN_EXPIRES_IN:
     process.env.AUTH_JWT_REFRESH_TOKEN_EXPIRES_IN,
-  ),
 }));
 
 type JwtConfig = ReturnType<typeof jwtConfig>;

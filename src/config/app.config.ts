@@ -4,12 +4,12 @@ import * as Joi from 'joi';
 export const CONFIG_NAME = 'app' as const;
 
 const appConfig = registerAs(CONFIG_NAME, () => ({
-  APP_PORT: process.env.APP_PORT!,
-  NODE_ENV: process.env.NODE_ENV!,
-  API_GLOBAL_PREFIX: process.env.API_GLOBAL_PREFIX!,
-  ENABLE_VERSION: process.env.ENABLE_VERSION!,
-  VERSION_PREFIX: process.env.VERSION_PREFIX!,
-  DEFAULT_VERSION: process.env.DEFAULT_VERSION!,
+  APP_PORT: process.env.APP_PORT,
+  NODE_ENV: process.env.NODE_ENV,
+  API_GLOBAL_PREFIX: process.env.API_GLOBAL_PREFIX,
+  ENABLE_VERSION: process.env.ENABLE_VERSION,
+  VERSION_PREFIX: process.env.VERSION_PREFIX,
+  DEFAULT_VERSION: process.env.DEFAULT_VERSION,
 }));
 
 type AppConfig = ReturnType<typeof appConfig>;

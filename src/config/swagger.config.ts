@@ -4,7 +4,7 @@ import * as Joi from 'joi';
 export const CONFIG_NAME = 'swagger' as const;
 
 export const swaggerConfig = registerAs(CONFIG_NAME, () => ({
-  SWAGGER_DOCS_URL: process.env.SWAGGER_DOCS_URL!,
+  SWAGGER_DOCS_URL: process.env.SWAGGER_DOCS_URL,
 }));
 
 type SwaggerConfigs = ReturnType<typeof swaggerConfig>;
